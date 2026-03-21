@@ -142,33 +142,42 @@ function getLeadPrompt(field: string, memory: any) {
 function fallbackReply(message = "", industry = "") {
   const lower = message.toLowerCase();
   if (lower.includes("yes")) {
-    return NextResponse.json({
-      ok: true,
-      reply: "🔥 Perfect. Let’s get you set up.\n\n👉 Tap ‘Start My Setup’ below or call now and I’ll personally walk you through it in minutes.",
-    });
+    return "🔥 Perfect. Let’s get you set up.\n\n👉 Tap ‘Start My Setup’ below or call now and I’ll personally walk you through it in minutes.";
   }
 }
 
 export async function POST(req: NextRequest) {
-      const lower = (message || "").toLowerCase();
+  const body = await req.json();
 
-      // Auto CTA push for strong buying intent
-      if (
-        lower.includes("interested") ||
-        lower.includes("start") ||
-        lower.includes("sign up") ||
-        lower.includes("how do i begin")
-      ) {
-        return NextResponse.json({
-          ok: true,
-          reply: "🔥 Perfect. Let’s get you set up.\n\n👉 Call now or text me and I’ll personally walk you through it in minutes.",
-        });
-      }
+  const message = body.message || "";
+  const industry = body.industry || "general";
+  const memory = body.memory || {};
+
+  const lower = message.toLowerCase();
   try {
-    const { message, industry, memory = {} } = await req.json();
+
+    // Auto CTA push for strong buying intent
+    if (
+      lower.includes("interested") ||
+      lower.includes("start") ||
+      lower.includes("sign up") ||
+      lower.includes("how do i begin")
+    ) {
+      return NextResponse.json({
+        ok: true,
+        reply: "🔥 Perfect. Let’s get you set up.\n\n👉 Call now or text me and I’ll personally walk you through it in minutes.",
+      });
+    }
+    // Yes intent CTA
+    if (lower.includes("yes")) {
+      return NextResponse.json({
+        ok: true,
+        reply: "🔥 Perfect. Let’s get you set up.\n\n👉 Tap ‘Start My Setup’ below or call now and I’ll personally walk you through it in minutes.",
+      });
+    }
 
     const updatedMemory = extractMemory(message, { ...memory });
-    const lowered = (message || "").toLowerCase();
+    // removed duplicate 'lowered' variable
 
     const shouldCaptureLead =
       updatedMemory.intent === "demo" ||
