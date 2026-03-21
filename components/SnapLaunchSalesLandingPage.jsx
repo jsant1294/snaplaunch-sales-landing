@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import LucioFloatingWidget from "@/components/LucioFloatingWidget";
-import Footer from "@/components/Footer";
+import LucioFloatingWidget from "../components/LucioFloatingWidget";
+import Footer from "../components/Footer";
 
 const pillars = [
   {
@@ -130,8 +130,8 @@ const useCases = [
 const pricing = [
   {
     name: "Starter",
-    price: "$500",
-    note: "Setup",
+    price: "$399",
+    note: "+ $250 setup",
     features: [
       "Mobile-first landing page",
       "Lucio chat widget",
@@ -142,27 +142,29 @@ const pricing = [
     featured: false
   },
   {
-    name: "Growth",
-    price: "$1,500",
-    note: "Setup",
+    name: "Pro",
+    price: "$599",
+    note: "+ $350 setup",
     features: [
       "Everything in Starter",
-      "SMS follow-up wiring",
-      "Tenant-ready backend",
-      "Dashboard lead view"
+      "Booking integration",
+      "SMS demo wiring",
+      "Conversion-optimized Lucio flow",
+      "Best fit for most businesses"
     ],
-    cta: "Choose Growth",
+    cta: "Choose Pro",
     featured: true
   },
   {
-    name: "Custom",
-    price: "Custom",
-    note: "Buildout",
+    name: "Done For You",
+    price: "$1299",
+    note: "+ $450 setup",
     features: [
-      "Multi-page demos",
-      "Custom industry flows",
-      "Advanced automations",
-      "Future voice AI expansion"
+      "Full system build",
+      "AI assistant setup",
+      "Twilio SMS + voice integration",
+      "Advanced automation flow",
+      "Strategy + launch support"
     ],
     cta: "Book a Strategy Call",
     featured: false
@@ -295,6 +297,12 @@ export default function SnapLaunchSalesLandingPage() {
             <h1 className="snap-title">
               A complete client acquisition system — built for your business, <span>powered by Lucio AI.</span>
             </h1>
+            <span className="snap-pill">
+              Website + AI + SMS in one system
+            </span>
+            <p className="snap-sub">
+              We build high-converting websites powered by Lucio AI — designed to capture leads, respond instantly, and turn visitors into customers.
+            </p>
             <p className="snap-sub">
               We design, build, and automate everything — so you can focus on what matters most.
             </p>
@@ -303,6 +311,10 @@ export default function SnapLaunchSalesLandingPage() {
               <a className="snap-btn" href="#book">Book a Demo</a>
               <a className="snap-btn-secondary" href="#demo">See How It Works</a>
             </div>
+
+            <p style={{ fontSize: 13, opacity: 0.7 }}>
+              ⚡ Not just a website — a full lead capture system that works 24/7
+            </p>
 
             <div className="snap-mini-grid">
               {/* CHAT */}
@@ -379,20 +391,20 @@ export default function SnapLaunchSalesLandingPage() {
 
                 <div className="snap-chat-box">
                   <div className="snap-bubble-bot">
-                    Hey 👋 I'm Lucio. I can help with pricing, booking, and quick answers. What do you need?
+                    Hey 👋 I’m Lucio. I can help with pricing, bookings, and lead capture. What kind of business do you have?
                   </div>
                   <div className="snap-bubble-user">
-                    Do you have apartment availability this month?
+                    I run a cleaning business and need more booked jobs.
                   </div>
                   <div className="snap-bubble-bot">
-                    Yes — I can help with pricing, tours, and availability. What move-in date are you targeting?
+                    Perfect — SnapLaunch can help you capture leads, qualify them, and follow up automatically. Want a demo or pricing first?
                   </div>
                 </div>
 
                 <div className="snap-chip-row">
-                  <button className="snap-chip">Check Availability</button>
-                  <button className="snap-chip">Book a Tour</button>
-                  <button className="snap-chip">Pet Policy</button>
+                  <button className="snap-chip">See Pricing</button>
+                  <button className="snap-chip">Book Demo</button>
+                  <button className="snap-chip">How It Works</button>
                 </div>
 
                 <div className="snap-input-row">
@@ -482,31 +494,47 @@ export default function SnapLaunchSalesLandingPage() {
                 <span className="snap-preview-badge">Voice</span>
               </div>
               <div className="snap-call-preview">
-                <div className="snap-call-screen">
-                  <div className="snap-call-display">
-                    <div className="snap-call-avatar"></div>
-                    <p className="snap-call-name">Lucio AI</p>
-                    <p className="snap-call-status">In Call...</p>
-                    <div className="snap-call-duration">00:45</div>
+                <div className="snap-call-card">
+                  <div className="snap-call-content">
+                    <div className="snap-call-screen">
+                      <div className="snap-call-display">
+                        <div className="snap-call-avatar">
+                          <img
+                            src="/lucio-avatar.png"
+                            alt="Lucio AI"
+                          />
+                        </div>
+                        <p className="snap-call-name">Lucio AI</p>
+                        <p className="snap-call-status">In Call...</p>
+                        <div className="snap-call-duration">00:45</div>
+                      </div>
+                      <div className="snap-call-buttons">
+                        <button className="snap-call-btn snap-call-btn--mute">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                          </svg>
+                        </button>
+                        <button className="snap-call-btn snap-call-btn--end">End</button>
+                        <button className="snap-call-btn snap-call-btn--speaker">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="snap-call-buttons">
-                    <button className="snap-call-btn snap-call-btn--mute">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                      </svg>
-                    </button>
-                    <button className="snap-call-btn snap-call-btn--end">End</button>
-                    <button className="snap-call-btn snap-call-btn--speaker">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                      </svg>
-                    </button>
+                  <div className="snap-call-footer">
+                    <div className="snap-demo-footer">
+                      <p className="snap-demo-number">(404) 992-5807</p>
+                      <a href="tel:+14049925807" className="snap-btn snap-demo-action">
+                        Call Lucio
+                      </a>
+                      <span className="snap-demo-pill">
+                        ⚡ I personally respond within minutes
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div className="snap-call-number">
-                  <p>Call this number:</p>
-                  <strong>(470) 570-4973</strong>
                 </div>
               </div>
             </div>
@@ -537,9 +565,16 @@ export default function SnapLaunchSalesLandingPage() {
                     <input type="text" placeholder="Type your message..." readOnly />
                   </div>
                 </div>
-                <div className="snap-text-number">
-                  <p>Text this number:</p>
-                  <strong>(470) 570-4973</strong>
+                <div className="snap-text-footer">
+                  <div className="snap-demo-footer">
+                    <p className="snap-demo-number">(404) 992-5807</p>
+                    <a href="sms:+14049925807" className="snap-btn snap-demo-action">
+                      Text Lucio
+                    </a>
+                    <span className="snap-demo-pill">
+                      ⚡ I personally respond within minutes
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -575,7 +610,8 @@ export default function SnapLaunchSalesLandingPage() {
         <div className="snap-container">
           <div className="snap-section-head">
             <p>Pricing</p>
-            <h2>Productized offers that are easy to explain and easy to sell.</h2>
+            <h2>We build websites that don’t just look good — they capture leads and follow up automatically.</h2>
+            <span>We build everything for you — no technical skills needed.</span>
           </div>
 
           <div className="snap-price-grid">
@@ -585,7 +621,7 @@ export default function SnapLaunchSalesLandingPage() {
                 <h3>{plan.name}</h3>
                 <div className="snap-price-row">
                   <strong>{plan.price}</strong>
-                  <span>{plan.note}</span>
+                  <span className="snap-price-note">{plan.note}</span>
                 </div>
                 <ul className="snap-feature-list">
                   {plan.features.map((feature) => (
@@ -688,7 +724,7 @@ export default function SnapLaunchSalesLandingPage() {
             <div className="snap-proof-box snap-proof-box--accented">
               <p>Positioning line</p>
               <strong>
-                "We install Lucio — an AI assistant that answers questions, captures leads, and follows up automatically."
+                "We build you a high-converting website powered by Lucio — an AI assistant that answers questions, captures leads, and follows up automatically."
               </strong>
             </div>
           </div>

@@ -1,166 +1,464 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useLucioRAG } from "@/hooks/useLucioRAG";
+import { useState, useMemo, useEffect, useRef } from "react";
 
-const OPTIONS = [
-  { value: "contractor", label: "Contractors" },
-  { value: "apartment", label: "Apartments" },
-  { value: "airbnb", label: "Airbnb" },
-  { value: "photography", label: "Photography" }
-];
-
-const ACTIONS = {
-  contractor: ["Get Pricing", "Book Estimate", "Talk to Human"],
-  apartment: ["Check Availability", "Book a Tour", "Pet Policy"],
-  airbnb: ["Check Dates", "House Rules", "Parking Info"],
-  photography: ["Session Pricing", "Book a Call", "Availability"]
+const industryPrompts = {
+  contractors: "I run a contracting business and need more estimate requests.",
+  apartments: "I manage apartments and want to capture more tour leads.",
+  airbnb: "I host Airbnb properties and want to automate guest inquiries.",
+  photography: "I run a photography business and want more booked sessions.",
 };
 
-let messageIdCounter = 0;
-function generateMessageId() {
-  return `msg-${++messageIdCounter}`;
+const industryReplies = {
+  contractors:
+    "Perfect — SnapLaunch can help contractors capture estimate requests, qualify leads, and follow up automatically. Want pricing or a demo first?",
+  apartments:
+    "Perfect — SnapLaunch can help apartment teams answer leasing questions, capture leads, and book tours automatically. Want pricing or a demo first?",
+  airbnb:
+    "Perfect — SnapLaunch can help automate guest questions, booking inquiries, and follow-up. Want pricing or a demo first?",
+  photography:
+    "Perfect — SnapLaunch can help photographers capture inquiries, answer pricing questions, and book more sessions. Want pricing or a demo first?",
+};
+
+const starterMessage = {
+  role: "bot",
+  text: "Hey 👋 I’m Lucio. I can help with pricing, demos, and lead capture. What kind of business do you have?",
+};
+
+const globalStyles = `
+@keyframes lucioPulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(46,168,255,0.35);
+  }
+  70% {
+    transform: scale(1.04);
+    box-shadow: 0 0 0 18px rgba(46,168,255,0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(46,168,255,0);
+  }
 }
+@keyframes lucioGlow {
+  0% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.45;
+  }
+}
+`;
 
 export default function LucioFloatingWidget() {
-  const [open, setOpen] = useState(false);
-  const [industry, setIndustry] = useState("apartment");
-  const [name, setName] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [industry, setIndustry] = useState("contractors");
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState([
-    { id: generateMessageId(), role: "bot", content: "Hey 👋 I'm Lucio. I can help with pricing, booking, and quick answers. What do you need?" }
-  ]);
-  const logRef = useRef(null);
-
-  // RAG hook
-  const { ask, loading: sending, error, resetHistory } = useLucioRAG();
-
-  const quickActions = useMemo(() => ACTIONS[industry] || ACTIONS.contractor, [industry]);
+  const [messages, setMessages] = useState([starterMessage]);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setOpen(true), 1200);
-    return () => clearTimeout(timer);
-  }, []);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
-  useEffect(() => {
-    if (logRef.current) {
-      logRef.current.scrollTop = logRef.current.scrollHeight;
-    }
-  }, [messages, open]);
+  const quickReplies = useMemo(
+    () => [
+      { label: "See Pricing", value: "pricing" },
+      { label: "Book Demo", value: "demo" },
+      { label: "How It Works", value: "how-it-works" },
+    ],
+    []
+  );
 
-  const industryMessages = useMemo(() => ({
-    apartment: "Got it 🏢 I'm in apartment mode. I can help with tours, pricing, and availability.",
-    airbnb: "Got it 🏡 I'm in Airbnb mode. I can help with dates, rules, and guest questions.",
-    photography: "Got it 📸 I'm in photography mode. I can help with sessions, pricing, and booking.",
-    contractor: "Got it 🔧 I'm in contractor mode. I can help with estimates, timelines, and next steps."
-  }), []);
+  const handleIndustryChange = (value) => {
+    setIndustry(value);
 
-  useEffect(() => {
-    resetHistory();
+    const userText =
+      industryPrompts[value] || `I run a ${value} business.`;
+
+    const botText =
+      industryReplies[value] ||
+      "Perfect — SnapLaunch can help you capture leads, qualify them, and follow up automatically. Want pricing or a demo first?";
+
     setMessages([
-      {
-        id: generateMessageId(),
-        role: "bot",
-        content: industryMessages[industry] || industryMessages.contractor
-      }
+      starterMessage,
+      { role: "user", text: userText },
+      { role: "bot", text: botText },
     ]);
-  }, [industry, industryMessages, resetHistory]);
+  };
 
-  async function sendMessage(messageText) {
-    const trimmed = messageText.trim();
-    if (!trimmed || sending) return;
+  const handleQuickReply = (value) => {
+    if (value === "pricing") {
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", text: "Show me pricing." },
+        {
+          role: "bot",
+          text: "Most businesses go with Pro: $599 + $350 setup. It includes Lucio, lead capture, booking flow, and SMS demo wiring. Want to book a demo or get started?",
+        },
+      ]);
+      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
 
-    // Add user message to chat
-    setMessages((prev) => [...prev, { id: generateMessageId(), role: "user", content: trimmed }]);
+    if (value === "demo") {
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", text: "I want a demo." },
+        {
+          role: "bot",
+          text: "Great — tap the Book Demo section below or leave your name, email, and business type so we can map the right setup for you.",
+        },
+      ]);
+      document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    if (value === "how-it-works") {
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", text: "How does it work?" },
+        {
+          role: "bot",
+          text: "Lucio greets visitors, answers common questions, captures lead details, and triggers follow-up so fewer opportunities slip away.",
+        },
+      ]);
+      document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = input.trim();
+    setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
     setInput("");
+    setLoading(true);
 
-    // Get answer from RAG
-    const answer = await ask(trimmed);
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage, industry }),
+      });
 
-    // Add Lucio's reply
-    setMessages((prev) => [...prev, { id: generateMessageId(), role: "bot", content: answer }]);
-  }
+      const data = await res.json();
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text:
+            data?.reply ||
+            "I can help with pricing, demos, and setup. Want pricing or a demo first?",
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text:
+            "I can help with pricing, demos, and setup. Want pricing or a demo first?",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const pulseStyle = {
+    animation: "lucioPulse 2.2s infinite",
+  };
 
   return (
     <>
-      <button className="lucio-launcher" onClick={() => setOpen((v) => !v)} aria-label="Open Lucio">
-        <span className="lucio-pulse" />
-        <img src="/lucio-mascot.png" alt="Lucio mascot" />
-      </button>
-
-      <section className={`lucio-panel ${open ? "open" : ""}`} aria-hidden={!open}>
-        <div className="lucio-head">
-          <div className="lucio-brand">
-            <img src="/lucio-mascot.png" alt="Lucio mascot" />
-            <div>
-              <strong>Lucio AI</strong>
-              <p>SnapLaunch lead assistant</p>
-            </div>
-          </div>
-          <button className="lucio-close" onClick={() => setOpen(false)} aria-label="Close">×</button>
-        </div>
-
-        <div className="lucio-banner">Ask about pricing, availability, tours, or booking.</div>
-
-        <div className="lucio-select-wrap">
-          <label className="lucio-select-label">Industry Mode</label>
-          <select className="lucio-select" value={industry} onChange={(e) => setIndustry(e.target.value)}>
-            {OPTIONS.map((item) => (
-              <option key={item.value} value={item.value}>{item.label}</option>
-            ))}
-          </select>
-        </div>
-
-        <div className="lucio-log" ref={logRef}>
-          {messages.map((message) => (
-            <div key={message.id} className={`lucio-bubble ${message.role === "user" ? "lucio-user" : "lucio-bot"}`}>
-              {message.content}
-            </div>
-          ))}
-          {sending && (
-            <div className="lucio-bubble lucio-bot">
-              <span className="lucio-typing">Lucio is thinking...</span>
-            </div>
-          )}
-        </div>
-
-        <div className="lucio-actions">
-          {quickActions.map((label) => (
-            <button key={label} className="lucio-chip" onClick={() => sendMessage(label)} type="button">
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="lucio-lead-grid">
-          <input
-            className="lucio-input"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your name (optional)"
-          />
-          <button className="lucio-book-btn" type="button" onClick={() => sendMessage("Book now")}>
-            Book now
-          </button>
-        </div>
-
-        <div className="lucio-compose">
-          <input
-            className="lucio-input"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            onKeyDown={(e) => {
-              if (e.key === "Enter") sendMessage(input);
+      <style>{globalStyles}</style>
+      {!isOpen && (
+        <>
+          <span
+            style={{
+              position: "fixed",
+              bottom: 110,
+              right: 20,
+              background: "rgba(8,17,32,0.95)",
+              color: "#fff",
+              fontSize: 12,
+              padding: "6px 10px",
+              borderRadius: 999,
+              whiteSpace: "nowrap",
+              border: "1px solid rgba(255,255,255,0.1)",
+              zIndex: 10000,
+              pointerEvents: "none",
             }}
-          />
-          <button className="lucio-send" type="button" disabled={sending} onClick={() => sendMessage(input)}>
-            {sending ? "..." : "Send"}
-          </button>
-        </div>
+          >
+            Ask Lucio
+          </span>
 
-        {error && <div className="lucio-error">{error}</div>}
-      </section>
+          <button
+            onClick={() => setIsOpen(true)}
+            aria-label="Open Lucio assistant"
+            style={{
+              ...pulseStyle,
+              position: "fixed",
+              right: 20,
+              bottom: 20,
+              width: 78,
+              height: 78,
+              borderRadius: "999px",
+              border: "1px solid rgba(255,255,255,0.14)",
+              background: "linear-gradient(180deg,#071120,#0b1830)",
+              zIndex: 9999,
+              cursor: "pointer",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: -8,
+                borderRadius: "999px",
+                background:
+                  "radial-gradient(circle, rgba(46,168,255,0.22) 0%, rgba(46,168,255,0) 70%)",
+                animation: "lucioGlow 2.2s infinite",
+                pointerEvents: "none",
+              }}
+            />
+
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                borderRadius: "999px",
+                overflow: "hidden",
+                boxShadow: "0 18px 40px rgba(0,0,0,0.38)",
+              }}
+            >
+              <img
+                src="/lucio-logo.png"
+                alt="Lucio"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "999px",
+                  display: "block",
+                }}
+              />
+            </div>
+
+            <span
+              style={{
+                position: "absolute",
+                top: 4,
+                right: 4,
+                width: 12,
+                height: 12,
+                borderRadius: "999px",
+                background: "#34d399",
+                border: "2px solid #081120",
+              }}
+            />
+          </button>
+        </>
+      )}
+
+      {isOpen && (
+        <div
+          style={{
+            position: "fixed",
+            right: 20,
+            bottom: 20,
+            width: 360,
+            maxWidth: "calc(100vw - 24px)",
+            background: "linear-gradient(180deg,#081120,#0b1730)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            borderRadius: 22,
+            padding: 14,
+            color: "#fff",
+            zIndex: 9999,
+            boxShadow: "0 24px 60px rgba(0,0,0,0.45)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 12,
+            }}
+          >
+            <div>
+              <strong style={{ display: "block", fontSize: 18 }}>Lucio AI</strong>
+              <span style={{ fontSize: 13, opacity: 0.72 }}>Lead capture assistant</span>
+            </div>
+
+            <button
+              onClick={() => setIsOpen(false)}
+              style={{
+                background: "transparent",
+                border: "none",
+                color: "#fff",
+                fontSize: 22,
+                cursor: "pointer",
+              }}
+            >
+              ×
+            </button>
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <label style={{ display: "block", fontSize: 12, opacity: 0.7, marginBottom: 6 }}>
+              Industry Mode
+            </label>
+            <select
+              value={industry}
+              onChange={(e) => handleIndustryChange(e.target.value)}
+              style={{
+                width: "100%",
+                height: 46,
+                borderRadius: 14,
+                border: "1px solid rgba(255,255,255,0.14)",
+                background: "rgba(255,255,255,0.04)",
+                color: "#fff",
+                padding: "0 12px",
+                outline: "none",
+              }}
+            >
+              <option value="contractors" style={{ color: "#000" }}>Contractors</option>
+              <option value="apartments" style={{ color: "#000" }}>Apartments</option>
+              <option value="airbnb" style={{ color: "#000" }}>Airbnb</option>
+              <option value="photography" style={{ color: "#000" }}>Photography</option>
+            </select>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 10,
+              maxHeight: 260,
+              overflowY: "auto",
+              marginBottom: 12,
+            }}
+          >
+            {messages.map((msg, i) => (
+              <div
+                key={i}
+                style={{
+                  alignSelf: msg.role === "bot" ? "flex-start" : "flex-end",
+                  maxWidth: "88%",
+                  background:
+                    msg.role === "bot"
+                      ? "linear-gradient(180deg,#12315e,#0e2648)"
+                      : "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: 18,
+                  padding: "12px 14px",
+                  fontSize: 14,
+                  lineHeight: 1.45,
+                }}
+              >
+                {msg.text}
+              </div>
+            ))}
+
+            {loading && (
+              <div
+                style={{
+                  alignSelf: "flex-start",
+                  maxWidth: "88%",
+                  background: "linear-gradient(180deg,#12315e,#0e2648)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: 18,
+                  padding: "12px 14px",
+                  fontSize: 14,
+                }}
+              >
+                Thinking...
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+              marginBottom: 12,
+            }}
+          >
+            {quickReplies.map((item) => (
+              <button
+                key={item.value}
+                onClick={() => handleQuickReply(item.value)}
+                style={{
+                  borderRadius: 999,
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  background: "rgba(255,255,255,0.05)",
+                  color: "#fff",
+                  padding: "10px 12px",
+                  fontSize: 13,
+                  cursor: "pointer",
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", gap: 8 }}>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSend();
+              }}
+              placeholder="Type your message..."
+              style={{
+                flex: 1,
+                height: 46,
+                borderRadius: 14,
+                border: "1px solid rgba(255,255,255,0.14)",
+                background: "rgba(255,255,255,0.04)",
+                color: "#fff",
+                padding: "0 14px",
+                outline: "none",
+              }}
+            />
+            <button
+              onClick={handleSend}
+              style={{
+                height: 46,
+                padding: "0 18px",
+                borderRadius: 14,
+                border: "none",
+                background: "linear-gradient(180deg,#2ea8ff,#0b84ff)",
+                color: "#fff",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Send
+            </button>
+          </div>
+
+          <div className="snap-cta-row" style={{ display: 'flex', gap: 10, marginTop: 16, justifyContent: 'center' }}>
+            <a href="tel:+14049925807" className="snap-btn">
+              Call Now — Get Setup Today
+            </a>
+            <a href="sms:+14049925807" className="snap-btn-secondary">
+              Text Me — Quick Questions
+            </a>
+          </div>
+        </div>
+      )}
     </>
   );
 }
