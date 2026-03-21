@@ -59,6 +59,13 @@ export default function LucioFloatingWidget() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([starterMessage]);
   const [loading, setLoading] = useState(false);
+  const [memory, setMemory] = useState({});
+  const [lead, setLead] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [leadSent, setLeadSent] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -74,67 +81,79 @@ export default function LucioFloatingWidget() {
     []
   );
 
-  const handleIndustryChange = (value) => {
-    setIndustry(value);
 
-    const userText =
-      industryPrompts[value] || `I run a ${value} business.`;
+const handleIndustryChange = (value) => {
+  setIndustry(value);
 
-    const botText =
-      industryReplies[value] ||
-      "Perfect — SnapLaunch can help you capture leads, qualify them, and follow up automatically. Want pricing or a demo first?";
+  const userText =
+    industryPrompts[value] || `I run a ${value} business.`;
 
-    setMessages([
-      starterMessage,
-      { role: "user", text: userText },
-      { role: "bot", text: botText },
+  const botText =
+    industryReplies[value] ||
+    "Perfect — SnapLaunch can help you capture leads, qualify them, and follow up automatically. Want pricing or a demo first?";
+
+  setMessages([
+    starterMessage,
+    { role: "user", text: userText },
+    { role: "bot", text: botText },
+  ]);
+};
+
+const handleQuickReply = (value) => {
+  if (value === "pricing") {
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", text: "Show me pricing." },
+      {
+        role: "bot",
+        text: `Hi ${lead.name || "there"}! 👋\n\nFor ${industry}, most clients go with our Pro system.\n\n👉 $599 + $350 setup\n\nThis includes:\n• Lead capture\n• Instant responses\n• Booking flow\n• SMS follow-up\n\n⚡ Most businesses see results in the first 7–14 days.\n\nWe only take a few new clients per week to set everything up properly.\n\n👉 Do you want me to get you started, or walk you through a quick demo first?`,
+      },
     ]);
-  };
+    document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
+    return;
+  }
 
-  const handleQuickReply = (value) => {
-    if (value === "pricing") {
-      setMessages((prev) => [
-        ...prev,
-        { role: "user", text: "Show me pricing." },
-        {
-          role: "bot",
-          text: "Most businesses go with Pro: $599 + $350 setup. It includes Lucio, lead capture, booking flow, and SMS demo wiring. Want to book a demo or get started?",
-        },
-      ]);
-      document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
+  if (value === "demo") {
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", text: "I want a demo." },
+      {
+        role: "bot",
+        text: "Great — the fastest next step is to call or text now so we can map the right setup for your business.",
+      },
+    ]);
+    return;
+  }
 
-    if (value === "demo") {
-      setMessages((prev) => [
-        ...prev,
-        { role: "user", text: "I want a demo." },
-        {
-          role: "bot",
-          text: "Great — tap the Book Demo section below or leave your name, email, and business type so we can map the right setup for you.",
-        },
-      ]);
-      document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
-      return;
-    }
+  if (value === "how-it-works") {
+    setMessages((prev) => [
+      ...prev,
+      { role: "user", text: "How does it work?" },
+      {
+        role: "bot",
+        text: "SnapLaunch gives you a smart lead-capturing website with Lucio AI, instant responses, and follow-up flow. Want pricing or a demo first?",
+      },
+    ]);
+    document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
+    return;
+  }
 
-    if (value === "how-it-works") {
-      setMessages((prev) => [
-        ...prev,
-        { role: "user", text: "How does it work?" },
-        {
-          role: "bot",
-          text: "Lucio greets visitors, answers common questions, captures lead details, and triggers follow-up so fewer opportunities slip away.",
-        },
-      ]);
-      document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  if (value === "call") {
+    window.location.href = "tel:+14049925807";
+    return;
+  }
+
+  if (value === "text") {
+    window.location.href = "sms:+14049925807";
+    return;
+  }
+};
 
   const handleSend = async () => {
     if (!input.trim()) return;
 
     const userMessage = input.trim();
+
     setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
     setInput("");
     setLoading(true);
@@ -142,28 +161,74 @@ export default function LucioFloatingWidget() {
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userMessage, industry }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          industry,
+          memory,
+        }),
       });
 
       const data = await res.json();
 
+      setMemory(data.memory || {});
+
+      let hardClose = data.hardClose;
+
+      if (data.lead) {
+        setLead(data.lead);
+      }
+
+      if (data.leadCaptured && data.lead && !leadSent) {
+        await fetch("/api/send-lead", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lead: data.lead,
+          }),
+        });
+        setLeadSent(true);
+      }
+
+      const botReply =
+        data?.reply ||
+        "I can help with pricing, demos, and setup. Want to get started?";
+
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        let newMessages = prev;
+        if (!(last?.role === "bot" && last?.text === botReply)) {
+          newMessages = [
+            ...prev,
+            {
+              role: "bot",
+              text: botReply,
+            },
+          ];
+        }
+        // If hardClose, append a strong CTA
+        if (hardClose) {
+          newMessages = [
+            ...newMessages,
+            {
+              role: "bot",
+              text: "🔥 Ready to launch? Call or text now and I’ll personally walk you through setup in minutes!",
+            },
+          ];
+        }
+        return newMessages;
+      });
+    } catch (err) {
       setMessages((prev) => [
         ...prev,
         {
           role: "bot",
           text:
-            data?.reply ||
-            "I can help with pricing, demos, and setup. Want pricing or a demo first?",
-        },
-      ]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "bot",
-          text:
-            "I can help with pricing, demos, and setup. Want pricing or a demo first?",
+            "I can help with pricing, demos, and setup. Want to get started?",
         },
       ]);
     } finally {
@@ -413,6 +478,27 @@ export default function LucioFloatingWidget() {
             ))}
           </div>
 
+
+          {lead?.email && lead?.phone && (
+            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+              <a
+                href="tel:+14049925807"
+                className="snap-btn"
+                style={{ textDecoration: "none" }}
+              >
+                Call Now
+              </a>
+              <a
+                href="sms:+14049925807"
+                className="snap-btn-secondary"
+                style={{ textDecoration: "none" }}
+              >
+                Text Me
+              </a>
+            </div>
+          )}
+
+
           <div style={{ display: "flex", gap: 8 }}>
             <input
               value={input}
@@ -449,16 +535,35 @@ export default function LucioFloatingWidget() {
             </button>
           </div>
 
-          <div className="snap-cta-row" style={{ display: 'flex', gap: 10, marginTop: 16, justifyContent: 'center' }}>
-            <a href="tel:+14049925807" className="snap-btn">
-              Call Now — Get Setup Today
-            </a>
-            <a href="sms:+14049925807" className="snap-btn-secondary">
-              Text Me — Quick Questions
-            </a>
-          </div>
-        </div>
-      )}
-    </>
-  );
+          {lead?.email && lead?.phone && (
+            <div
+              style={{
+                marginTop: 10,
+                fontSize: 12,
+                opacity: 0.85,
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 12,
+                padding: "10px 12px",
+                background: "rgba(255,255,255,0.04)",
+              }}
+            >
+              Lead captured: {lead.name} • {lead.email} • {lead.phone}
+            </div>
+          )}
+
+          <div
+      className="snap-cta-row"
+      style={{ display: "flex", gap: 10, marginTop: 16, justifyContent: "center" }}
+    >
+      <a href="tel:+14049925807" className="snap-btn">
+        🔥 Start My Setup
+      </a>
+      <a href="sms:+14049925807" className="snap-btn-secondary">
+        📞 Call Me Now
+      </a>
+    </div>
+  </div>
+)}
+  </>
+);
 }

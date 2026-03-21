@@ -300,10 +300,10 @@ export default function SnapLaunchSalesLandingPage() {
             <span className="snap-pill">
               Website + AI + SMS in one system
             </span>
-            <p className="snap-sub">
+            <p className="snap-sub" style={{ color: '#fb923c', fontWeight: 700 }}>
               We build high-converting websites powered by Lucio AI — designed to capture leads, respond instantly, and turn visitors into customers.
             </p>
-            <p className="snap-sub">
+            <p className="snap-sub" style={{ color: '#fb923c', fontWeight: 700 }}>
               We design, build, and automate everything — so you can focus on what matters most.
             </p>
 
@@ -610,6 +610,18 @@ export default function SnapLaunchSalesLandingPage() {
         <div className="snap-container">
           <div className="snap-section-head">
             <p>Pricing</p>
+            <div style={{
+              background: "#7c3aed",
+              color: "#fff",
+              fontWeight: 700,
+              borderRadius: 10,
+              padding: "10px 18px",
+              margin: "18px 0 8px 0",
+              fontSize: 17,
+              display: "inline-block"
+            }}>
+              ⚡ Most contractors choose Pro — it gives you everything needed to start booking jobs immediately.
+            </div>
             <h2>We build websites that don’t just look good — they capture leads and follow up automatically.</h2>
             <span>We build everything for you — no technical skills needed.</span>
           </div>
@@ -623,6 +635,21 @@ export default function SnapLaunchSalesLandingPage() {
                   <strong>{plan.price}</strong>
                   <span className="snap-price-note">{plan.note}</span>
                 </div>
+                {/* Add ROI badge under Pro */}
+                {plan.name === "Pro" && (
+                  <div style={{
+                    background: "#7c3aed",
+                    color: "#fff",
+                    fontWeight: 700,
+                    borderRadius: 8,
+                    padding: "7px 14px",
+                    margin: "12px 0 8px 0",
+                    fontSize: 15,
+                    display: "inline-block"
+                  }}>
+                    🔥 Best ROI — pays for itself with 1–2 jobs
+                  </div>
+                )}
                 <ul className="snap-feature-list">
                   {plan.features.map((feature) => (
                     <li key={feature}>
