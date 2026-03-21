@@ -183,11 +183,10 @@ export async function POST(req: NextRequest) {
       updatedMemory.intent === "demo" ||
       updatedMemory.intent === "pricing" ||
       updatedMemory.intent === "buying" ||
-      lowered.includes("get started") ||
-      lowered.includes("interested") ||
-      lowered.includes("call me") ||
-      lowered.includes("text me");
-
+      lower.includes("get started") ||
+lower.includes("interested") ||
+lower.includes("call me") ||
+lower.includes("text me")
     const missingField = getMissingLeadField(updatedMemory);
 
     if (shouldCaptureLead && missingField) {
