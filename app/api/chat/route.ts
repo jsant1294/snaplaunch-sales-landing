@@ -204,6 +204,21 @@ lower.includes("text me")
       !!updatedMemory.name && !!updatedMemory.email && !!updatedMemory.phone;
 
     if (leadComplete) {
+      // Send lead to /api/send-lead
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/send-lead`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          lead: {
+            name: updatedMemory.name,
+            email: updatedMemory.email,
+            phone: updatedMemory.phone,
+            industry,
+          },
+        }),
+      });
       if (!updatedMemory.confirmed) {
         updatedMemory.confirmed = true;
         return NextResponse.json({

@@ -46,8 +46,11 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
+import { NextRequest, NextResponse } from "next/server";
+
+export async function POST(req: NextRequest) {
       const errorText = await response.text();
-      return NextResponse.json(
+    if (!lead?.name || !lead?.email || !lead?.phone) {
         { ok: false, error: errorText },
         { status: 500 }
       );
