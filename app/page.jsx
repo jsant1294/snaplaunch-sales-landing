@@ -1,5 +1,5 @@
-import SnapLaunchSalesLandingPage from "@/components/SnapLaunchSalesLandingPage";
+import SnapLaunchSalesLandingPage from "../components/SnapLaunchSalesLandingPage";
 
-export default function Page() {
+export default function Home() {
   return <SnapLaunchSalesLandingPage />;
 }
