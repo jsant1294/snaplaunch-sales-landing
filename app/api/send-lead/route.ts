@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET() {
+  return NextResponse.json({
+    ok: true,
+    message: "send-lead route is live",
+    hasResendKey: !!process.env.RESEND_API_KEY,
+    hasEmail: !!process.env.LEAD_NOTIFICATION_EMAIL,
+  });
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { lead } = await req.json();
+    const body = await req.json();
+    const lead = body?.lead || {};
 
     if (!lead?.name || !lead?.email || !lead?.phone) {
       return NextResponse.json(
@@ -31,6 +41,9 @@ export async function POST(req: NextRequest) {
       </div>
     `;
 
+    console.log("Sending email to:", toEmail);
+    console.log("Lead data:", lead);
+
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
@@ -38,26 +51,26 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "SnapLaunch Leads <onboarding@resend.dev>",
+        from: "SnapLaunch <onboarding@resend.dev>",
         to: [toEmail],
         subject: `New Lead: ${lead.name}`,
         html: emailHtml,
       }),
     });
 
-    if (!response.ok) {
-import { NextRequest, NextResponse } from "next/server";
+    const responseText = await response.text();
+    console.log("Resend response:", response.status, responseText);
 
-export async function POST(req: NextRequest) {
-      const errorText = await response.text();
-    if (!lead?.name || !lead?.email || !lead?.phone) {
-        { ok: false, error: errorText },
+    if (!response.ok) {
+      return NextResponse.json(
+        { ok: false, error: responseText },
         { status: 500 }
       );
     }
 
     return NextResponse.json({ ok: true });
   } catch (error) {
+    console.error("SEND-LEAD ERROR:", error);
     return NextResponse.json(
       { ok: false, error: "Failed to send lead" },
       { status: 500 }

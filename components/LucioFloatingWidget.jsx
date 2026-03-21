@@ -1,23 +1,12 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const industryPrompts = {
   contractors: "I run a contracting business and need more estimate requests.",
   apartments: "I manage apartments and want to capture more tour leads.",
   airbnb: "I host Airbnb properties and want to automate guest inquiries.",
   photography: "I run a photography business and want more booked sessions.",
-};
-
-const industryReplies = {
-  contractors:
-    "Perfect — SnapLaunch can help contractors capture estimate requests, qualify leads, and follow up automatically. Want pricing or a demo first?",
-  apartments:
-    "Perfect — SnapLaunch can help apartment teams answer leasing questions, capture leads, and book tours automatically. Want pricing or a demo first?",
-  airbnb:
-    "Perfect — SnapLaunch can help automate guest questions, booking inquiries, and follow-up. Want pricing or a demo first?",
-  photography:
-    "Perfect — SnapLaunch can help photographers capture inquiries, answer pricing questions, and book more sessions. Want pricing or a demo first?",
 };
 
 const starterMessage = {
@@ -41,36 +30,25 @@ const globalStyles = `
   }
 }
 @keyframes lucioGlow {
-  0% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0.45;
-  }
+  0% { opacity: 0.45; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.45; }
 }
 `;
 
 export default function LucioFloatingWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    const handler = () => setIsOpen(true);
+    window.addEventListener('open-lucio-chat', handler);
+    return () => window.removeEventListener('open-lucio-chat', handler);
+  }, []);
   const [industry, setIndustry] = useState("contractors");
   const [input, setInput] = useState("");
+  const [memory, setMemory] = useState({});
   const [messages, setMessages] = useState([starterMessage]);
   const [loading, setLoading] = useState(false);
-  const [memory, setMemory] = useState({});
-  const [lead, setLead] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-  const [leadSent, setLeadSent] = useState(false);
   const messagesEndRef = useRef(null);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
 
   const quickReplies = useMemo(
     () => [
@@ -81,78 +59,84 @@ export default function LucioFloatingWidget() {
     []
   );
 
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
-const handleIndustryChange = (value) => {
-  setIndustry(value);
-
-  const userText =
-    industryPrompts[value] || `I run a ${value} business.`;
-
-  const botText =
-    industryReplies[value] ||
-    "Perfect — SnapLaunch can help you capture leads, qualify them, and follow up automatically. Want pricing or a demo first?";
-
-  setMessages([
-    starterMessage,
-    { role: "user", text: userText },
-    { role: "bot", text: botText },
-  ]);
-};
-
-const handleQuickReply = (value) => {
-  if (value === "pricing") {
-    setMessages((prev) => [
+  const handleIndustryChange = (value) => {
+    setIndustry(value);
+    setMemory((prev) => ({
       ...prev,
-      { role: "user", text: "Show me pricing." },
+      industry: value,
+    }));
+
+    const intro = industryPrompts[value];
+    if (!intro) return;
+
+    setMessages([
+      starterMessage,
+      { role: "user", text: intro },
       {
         role: "bot",
-        text: `Hi ${lead.name || "there"}! 👋\n\nFor ${industry}, most clients go with our Pro system.\n\n👉 $599 + $350 setup\n\nThis includes:\n• Lead capture\n• Instant responses\n• Booking flow\n• SMS follow-up\n\n⚡ Most businesses see results in the first 7–14 days.\n\nWe only take a few new clients per week to set everything up properly.\n\n👉 Do you want me to get you started, or walk you through a quick demo first?`,
+        text: "Perfect — SnapLaunch can help you capture leads, qualify them, and follow up automatically. Want a demo or pricing first?",
       },
     ]);
-    document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
-    return;
-  }
+  };
 
-  if (value === "demo") {
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", text: "I want a demo." },
-      {
-        role: "bot",
-        text: "Great — the fastest next step is to call or text now so we can map the right setup for your business.",
-      },
-    ]);
-    return;
-  }
+  const handleQuickReply = (value) => {
+    if (value === "pricing") {
+      const pricingSection = document.getElementById("pricing");
+      pricingSection?.scrollIntoView({ behavior: "smooth" });
 
-  if (value === "how-it-works") {
-    setMessages((prev) => [
-      ...prev,
-      { role: "user", text: "How does it work?" },
-      {
-        role: "bot",
-        text: "SnapLaunch gives you a smart lead-capturing website with Lucio AI, instant responses, and follow-up flow. Want pricing or a demo first?",
-      },
-    ]);
-    document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" });
-    return;
-  }
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", text: "I want pricing" },
+        {
+          role: "bot",
+          text:
+            industry === "contractors"
+              ? "For contractors, most businesses go with Pro: $599 + $350 setup. Want to get started or see a quick demo first?"
+              : "Most businesses go with Pro: $599 + $350 setup. Want to get started or see a quick demo first?",
+        },
+      ]);
+      return;
+    }
 
-  if (value === "call") {
-    window.location.href = "tel:+14049925807";
-    return;
-  }
+    if (value === "demo") {
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", text: "I want a demo" },
+        {
+          role: "bot",
+          text: "Great — I can help with that. Before we continue, what’s your first name?",
+        },
+      ]);
+      setMemory((prev) => ({
+        ...prev,
+        intent: "demo",
+        pendingField: "name",
+      }));
+      return;
+    }
 
-  if (value === "text") {
-    window.location.href = "sms:+14049925807";
-    return;
-  }
-};
+    if (value === "how-it-works") {
+      const section = document.getElementById("how-it-works");
+      section?.scrollIntoView({ behavior: "smooth" });
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", text: "How does it work?" },
+        {
+          role: "bot",
+          text: "We build the site, Lucio captures and qualifies leads, and your visitors are pushed toward calls, texts, demos, or bookings automatically.",
+        },
+      ]);
+    }
+  };
 
   const handleSend = async () => {
-    if (!input.trim()) return;
-
     const userMessage = input.trim();
+    if (!userMessage) return;
 
     setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
     setInput("");
@@ -175,60 +159,21 @@ const handleQuickReply = (value) => {
 
       setMemory(data.memory || {});
 
-      let hardClose = data.hardClose;
-
-      if (data.lead) {
-        setLead(data.lead);
-      }
-
-      if (data.leadCaptured && data.lead && !leadSent) {
-        await fetch("/api/send-lead", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            lead: data.lead,
-          }),
-        });
-        setLeadSent(true);
-      }
-
-      const botReply =
-        data?.reply ||
-        "I can help with pricing, demos, and setup. Want to get started?";
-
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        let newMessages = prev;
-        if (!(last?.role === "bot" && last?.text === botReply)) {
-          newMessages = [
-            ...prev,
-            {
-              role: "bot",
-              text: botReply,
-            },
-          ];
-        }
-        // If hardClose, append a strong CTA
-        if (hardClose) {
-          newMessages = [
-            ...newMessages,
-            {
-              role: "bot",
-              text: "🔥 Ready to launch? Call or text now and I’ll personally walk you through setup in minutes!",
-            },
-          ];
-        }
-        return newMessages;
-      });
-    } catch (err) {
       setMessages((prev) => [
         ...prev,
         {
           role: "bot",
           text:
-            "I can help with pricing, demos, and setup. Want to get started?",
+            data.reply ||
+            "I can help with pricing, demos, and setup. Want pricing or a demo first?",
+        },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          text: "Sorry, I ran into an issue. Please try again.",
         },
       ]);
     } finally {
@@ -243,6 +188,7 @@ const handleQuickReply = (value) => {
   return (
     <>
       <style>{globalStyles}</style>
+
       {!isOpen && (
         <>
           <span
@@ -359,7 +305,9 @@ const handleQuickReply = (value) => {
           >
             <div>
               <strong style={{ display: "block", fontSize: 18 }}>Lucio AI</strong>
-              <span style={{ fontSize: 13, opacity: 0.72 }}>Lead capture assistant</span>
+              <span style={{ fontSize: 13, opacity: 0.72 }}>
+                Lead capture assistant
+              </span>
             </div>
 
             <button
@@ -377,7 +325,9 @@ const handleQuickReply = (value) => {
           </div>
 
           <div style={{ marginBottom: 12 }}>
-            <label style={{ display: "block", fontSize: 12, opacity: 0.7, marginBottom: 6 }}>
+            <label
+              style={{ display: "block", fontSize: 12, opacity: 0.7, marginBottom: 6 }}
+            >
               Industry Mode
             </label>
             <select
@@ -394,10 +344,18 @@ const handleQuickReply = (value) => {
                 outline: "none",
               }}
             >
-              <option value="contractors" style={{ color: "#000" }}>Contractors</option>
-              <option value="apartments" style={{ color: "#000" }}>Apartments</option>
-              <option value="airbnb" style={{ color: "#000" }}>Airbnb</option>
-              <option value="photography" style={{ color: "#000" }}>Photography</option>
+              <option value="contractors" style={{ color: "#000" }}>
+                Contractors
+              </option>
+              <option value="apartments" style={{ color: "#000" }}>
+                Apartments
+              </option>
+              <option value="airbnb" style={{ color: "#000" }}>
+                Airbnb
+              </option>
+              <option value="photography" style={{ color: "#000" }}>
+                Photography
+              </option>
             </select>
           </div>
 
@@ -478,27 +436,6 @@ const handleQuickReply = (value) => {
             ))}
           </div>
 
-
-          {lead?.email && lead?.phone && (
-            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-              <a
-                href="tel:+14049925807"
-                className="snap-btn"
-                style={{ textDecoration: "none" }}
-              >
-                Call Now
-              </a>
-              <a
-                href="sms:+14049925807"
-                className="snap-btn-secondary"
-                style={{ textDecoration: "none" }}
-              >
-                Text Me
-              </a>
-            </div>
-          )}
-
-
           <div style={{ display: "flex", gap: 8 }}>
             <input
               value={input}
@@ -535,35 +472,55 @@ const handleQuickReply = (value) => {
             </button>
           </div>
 
-          {lead?.email && lead?.phone && (
-            <div
+          <div
+            className="snap-cta-row"
+            style={{
+              display: "flex",
+              gap: 10,
+              marginTop: 16,
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <a
+              href="tel:+14049925807"
               style={{
-                marginTop: 10,
-                fontSize: 12,
-                opacity: 0.85,
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: 12,
-                padding: "10px 12px",
-                background: "rgba(255,255,255,0.04)",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 44,
+                padding: "0 18px",
+                borderRadius: 14,
+                border: "none",
+                background: "linear-gradient(180deg,#2ea8ff,#0b84ff)",
+                color: "#fff",
+                fontWeight: 700,
               }}
             >
-              Lead captured: {lead.name} • {lead.email} • {lead.phone}
-            </div>
-          )}
-
-          <div
-      className="snap-cta-row"
-      style={{ display: "flex", gap: 10, marginTop: 16, justifyContent: "center" }}
-    >
-      <a href="tel:+14049925807" className="snap-btn">
-        🔥 Start My Setup
-      </a>
-      <a href="sms:+14049925807" className="snap-btn-secondary">
-        📞 Call Me Now
-      </a>
-    </div>
-  </div>
-)}
-  </>
-);
+              🔥 Start My Setup
+            </a>
+            <a
+              href="tel:+14049925807"
+              style={{
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: 44,
+                padding: "0 18px",
+                borderRadius: 14,
+                border: "1px solid rgba(255,255,255,0.14)",
+                background: "rgba(255,255,255,0.05)",
+                color: "#fff",
+                fontWeight: 700,
+              }}
+            >
+              📞 Call Me Now
+            </a>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }

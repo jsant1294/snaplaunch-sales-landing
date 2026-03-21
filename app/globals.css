@@ -1,3 +1,26 @@
+@media (max-width: 600px) {
+  .snap-hero {
+    background: url('/moblie.png') no-repeat top center/cover !important;
+  }
+  .snap-hero picture {
+    display: none !important;
+  }
+}
+/* Responsive hero image for mobile */
+@media (max-width: 600px) {
+  .snap-hero picture,
+  .snap-hero img {
+    width: 100vw !important;
+    height: 60vw !important;
+    min-height: 180px;
+    max-height: 320px;
+    object-fit: cover !important;
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+}
 .snap-price-row {
   display: flex;
   align-items: baseline;
@@ -1163,5 +1186,25 @@ img { display: block; max-width: 100%; }
   40% {
     opacity: 1;
     transform: translateY(-2px);
+  }
+}
+@media (max-width: 768px) {
+  .snap-title {
+    font-size: 3rem;
+    line-height: 0.95;
+  }
+
+  .snap-sub {
+    font-size: 1rem !important;
+    line-height: 1.35;
+  }
+
+  .snap-hero-content {
+    max-width: 100%;
+  }
+
+  .snap-mini-grid {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 10px !important;
   }
 }
