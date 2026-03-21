@@ -7,39 +7,48 @@ import Footer from "@/components/Footer";
 const pillars = [
   {
     title: "Instant Lead Capture",
-    text: "Lucio greets visitors, answers questions, and captures serious leads before they bounce.",
+    stat: "24/7",
+    text: "Lucio greets every visitor, answers questions, and locks in serious leads before they bounce — day or night.",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-        stroke="#a8a0ff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+        stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
       </svg>
     ),
+    gradient: "linear-gradient(135deg, #6358ff 0%, #a78bfa 100%)",
+    accent: "#a78bfa",
     colorClass: "pillar-purple",
   },
   {
     title: "SMS Follow-Up",
-    text: "Every qualified lead triggers automated text follow-up so businesses stop losing money to slow replies.",
+    stat: "Instant",
+    text: "Every qualified lead fires an automatic text follow-up in seconds — so no deal ever goes cold again.",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-        stroke="#a8a0ff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+        stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="5" y="2" width="14" height="20" rx="2"/>
         <line x1="9" y1="7" x2="15" y2="7"/>
         <line x1="9" y1="11" x2="15" y2="11"/>
         <line x1="9" y1="15" x2="13" y2="15"/>
       </svg>
     ),
+    gradient: "linear-gradient(135deg, #0d9488 0%, #34d399 100%)",
+    accent: "#34d399",
     colorClass: "pillar-teal",
   },
   {
     title: "Industry Ready",
-    text: "Built for contractors, apartment communities, Airbnb hosts, and service businesses that need fast responses.",
+    stat: "4+",
+    text: "Built for contractors, apartments, Airbnb hosts, and service businesses that can't afford to miss a lead.",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-        stroke="#6358ff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+        stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         <polyline points="9 22 9 12 15 12 15 22"/>
       </svg>
     ),
+    gradient: "linear-gradient(135deg, #f59e0b 0%, #fb923c 100%)",
+    accent: "#fb923c",
     colorClass: "pillar-amber",
   },
 ];
@@ -160,7 +169,14 @@ const pricing = [
   }
 ];
 
+const navLinks = [
+  { label: "How it works", href: "#how-it-works" },
+  { label: "Industries", href: "#industries" },
+  { label: "Pricing", href: "#pricing" },
+];
+
 export default function SnapLaunchSalesLandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     business: "",
@@ -179,16 +195,10 @@ export default function SnapLaunchSalesLandingPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    
     try {
-      // Simulate form submission - in production, send to backend
       console.log("Form submitted:", formData);
-      
-      // Reset form and show success
       setSubmitted(true);
       setFormData({ name: "", business: "", email: "", industry: "", message: "" });
-      
-      // Clear success message after 3 seconds
       setTimeout(() => setSubmitted(false), 3000);
     } catch (error) {
       console.error("Form submission error:", error);
@@ -201,37 +211,92 @@ export default function SnapLaunchSalesLandingPage() {
     <div>
       <nav className="snap-nav">
         <div className="snap-container snap-nav-inner">
-          <div className="snap-brand">
-            <div className="snap-brand-badge">
-              <img src="/lucio-mascot.png" alt="Lucio mascot" />
-            </div>
+          <a className="snap-brand" href="#" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
+            <img src="/lucio-logo.png" alt="Lucio logo" style={{ width: 38, height: 38, borderRadius: 10, objectFit: "cover" }} />
             <div className="snap-brand-copy">
               <strong>SnapLaunch AI</strong>
               <span>Lucio-powered sales system</span>
             </div>
-          </div>
+          </a>
 
-          <div className="snap-links">
-            <a href="#how-it-works">How it works</a>
-            <a href="#industries">Industries</a>
-            <a href="#pricing">Pricing</a>
+          {/* Desktop links */}
+          <div className="snap-links snap-links--desktop">
+            {navLinks.map((link) => (
+              <a key={link.label} href={link.href}>{link.label}</a>
+            ))}
             <a className="snap-btn" href="#book">Book Demo</a>
           </div>
+
+          {/* Hamburger button (mobile only) */}
+          <button
+            className="snap-hamburger"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((prev) => !prev)}
+          >
+            {menuOpen ? (
+              // X icon
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            ) : (
+              // Hamburger icon
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+              </svg>
+            )}
+          </button>
         </div>
+
+        {/* Mobile dropdown menu */}
+        {menuOpen && (
+          <div className="snap-mobile-menu">
+            {navLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="snap-mobile-link"
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+            <a
+              className="snap-btn snap-mobile-cta"
+              href="#book"
+              onClick={() => setMenuOpen(false)}
+            >
+              Book Demo
+            </a>
+          </div>
+        )}
       </nav>
 
-      <section className="snap-hero">
-        <div className="snap-container snap-hero-grid">
+      <section className="snap-hero" style={{
+        position: "relative",
+        backgroundImage: "url('/only-lucio.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}>
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          background: "rgba(0, 0, 0, 0.55)",
+          zIndex: 0,
+        }} />
+        <div className="snap-container snap-hero-grid" style={{ position: "relative", zIndex: 1 }}>
           <div className="snap-hero-content">
-            <div className="snap-hero-lucio">
-              <img src="/lucio-mascot.png" alt="Lucio AI Assistant" />
-            </div>
             <h1 className="snap-title">
-              Turn your website into a <span>24/7 AI sales rep</span> with Lucio.
+              A complete client acquisition system — built for your business, <span>powered by Lucio AI.</span>
             </h1>
             <p className="snap-sub">
-              SnapLaunch installs a branded AI assistant that answers questions, captures leads, triggers SMS follow-up,
-              and helps businesses book more calls without hiring more staff.
+              We design, build, and automate everything — so you can focus on what matters most.
             </p>
 
             <div className="snap-cta-row">
@@ -240,37 +305,53 @@ export default function SnapLaunchSalesLandingPage() {
             </div>
 
             <div className="snap-mini-grid">
-              <div className="snap-mini-card snap-mini-card--accent">
-                <strong>
-                  CHAT
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6358ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '8px', flexShrink: 0 }}>
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                  </svg>
+              {/* CHAT */}
+              <div className="snap-mini-card snap-mini-card--accent" style={{ borderTop: "3px solid #a78bfa", position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: "#6358ff", opacity: 0.15, filter: "blur(20px)", pointerEvents: "none" }} />
+                <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ background: "linear-gradient(135deg,#6358ff,#a78bfa)", borderRadius: 8, padding: "4px 6px", display: "flex", alignItems: "center" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                  </span>
+                  <span style={{ color: "#a78bfa" }}>CHAT</span>
                 </strong>
                 <span>Lead response coverage</span>
               </div>
-              <div className="snap-mini-card snap-mini-card--accent">
-                <strong>
-                  <span className="snap-live-dot" />
-                  TEXT
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6358ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '8px', flexShrink: 0 }}>
-                    <rect x="5" y="2" width="14" height="20" rx="2"/>
-                    <line x1="9" y1="7" x2="15" y2="7"/>
-                    <line x1="9" y1="11" x2="15" y2="11"/>
-                    <line x1="9" y1="15" x2="13" y2="15"/>
-                  </svg>
+
+              {/* TEXT */}
+              <div className="snap-mini-card snap-mini-card--accent" style={{ borderTop: "3px solid #34d399", position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: "#0d9488", opacity: 0.15, filter: "blur(20px)", pointerEvents: "none" }} />
+                <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ background: "linear-gradient(135deg,#0d9488,#34d399)", borderRadius: 8, padding: "4px 6px", display: "flex", alignItems: "center" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="5" y="2" width="14" height="20" rx="2"/>
+                      <line x1="9" y1="7" x2="15" y2="7"/>
+                      <line x1="9" y1="11" x2="15" y2="11"/>
+                      <line x1="9" y1="15" x2="13" y2="15"/>
+                    </svg>
+                  </span>
+                  <span style={{ color: "#34d399" }}>
+                    <span className="snap-live-dot" />
+                    TEXT
+                  </span>
                 </strong>
                 <span>Instant follow-up flow</span>
               </div>
-              <div className="snap-mini-card snap-mini-card--accent">
-                <strong>
-                  VOICE
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6358ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '8px', flexShrink: 0 }}>
-                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                    <line x1="12" y1="19" x2="12" y2="23"/>
-                    <line x1="8" y1="23" x2="16" y2="23"/>
-                  </svg>
+
+              {/* VOICE */}
+              <div className="snap-mini-card snap-mini-card--accent" style={{ borderTop: "3px solid #fb923c", position: "relative", overflow: "hidden" }}>
+                <div style={{ position: "absolute", top: -20, right: -20, width: 80, height: 80, borderRadius: "50%", background: "#f59e0b", opacity: 0.15, filter: "blur(20px)", pointerEvents: "none" }} />
+                <strong style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ background: "linear-gradient(135deg,#f59e0b,#fb923c)", borderRadius: 8, padding: "4px 6px", display: "flex", alignItems: "center" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                      <line x1="12" y1="19" x2="12" y2="23"/>
+                      <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                  </span>
+                  <span style={{ color: "#fb923c" }}>VOICE</span>
                 </strong>
                 <span>Contractors, apartments, Airbnb, more</span>
               </div>
@@ -283,7 +364,7 @@ export default function SnapLaunchSalesLandingPage() {
                 <div className="snap-demo-head">
                   <div className="snap-demo-head-left">
                     <div className="snap-avatar">
-                      <img src="/lucio-mascot.png" alt="Lucio mascot" />
+                      <img src="/luciomascot.png" alt="Lucio mascot" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%" }} />
                     </div>
                     <div>
                       <strong>Lucio AI</strong>
@@ -298,7 +379,7 @@ export default function SnapLaunchSalesLandingPage() {
 
                 <div className="snap-chat-box">
                   <div className="snap-bubble-bot">
-                    Hey 👋 I’m Lucio. I can help with pricing, booking, and quick answers. What do you need?
+                    Hey 👋 I'm Lucio. I can help with pricing, booking, and quick answers. What do you need?
                   </div>
                   <div className="snap-bubble-user">
                     Do you have apartment availability this month?
@@ -333,11 +414,22 @@ export default function SnapLaunchSalesLandingPage() {
         <div className="snap-container">
           <div className="snap-card-grid">
             {pillars.map((item) => (
-              <div key={item.title} className={`snap-panel snap-panel--icon ${item.colorClass}`}>
-                <div className="snap-icon-tile">
-                  {item.icon}
+              <div key={item.title} className={`snap-panel snap-panel--icon ${item.colorClass}`} style={{ position: "relative", overflow: "hidden", borderTop: `3px solid ${item.accent}` }}>
+                {/* Glow blob */}
+                <div style={{
+                  position: "absolute", top: -30, right: -30,
+                  width: 120, height: 120, borderRadius: "50%",
+                  background: item.accent, opacity: 0.12, filter: "blur(30px)", pointerEvents: "none"
+                }} />
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                  <div className="snap-icon-tile" style={{ background: item.gradient, border: "none", padding: 12, borderRadius: 14 }}>
+                    {item.icon}
+                  </div>
+                  <span style={{ fontSize: "2rem", fontWeight: 800, color: item.accent, letterSpacing: "-1px", opacity: 0.9 }}>
+                    {item.stat}
+                  </span>
                 </div>
-                <h3>{item.title}</h3>
+                <h3 style={{ marginBottom: 8 }}>{item.title}</h3>
                 <p>{item.text}</p>
               </div>
             ))}
@@ -348,9 +440,6 @@ export default function SnapLaunchSalesLandingPage() {
       <section id="how-it-works" className="snap-section-alt">
         <div className="snap-container">
           <div className="snap-how-it-works-header">
-            <div className="snap-how-lucio">
-              <img src="/lucio-mascot.png" alt="Lucio Avatar" />
-            </div>
             <div className="snap-section-head">
               <p>How it works</p>
               <h2>A simple lead engine businesses understand fast.</h2>
@@ -363,9 +452,7 @@ export default function SnapLaunchSalesLandingPage() {
           <div className="snap-steps snap-steps--connected">
             {steps.map((item, index) => (
               <div key={item.title} className="snap-step snap-step--card">
-                {/* connector line between steps */}
                 {index < steps.length - 1 && <div className="snap-step-connector" />}
-
                 <div className="snap-step-top">
                   <div className="snap-step-icon-wrap">
                     {item.icon}
@@ -389,7 +476,6 @@ export default function SnapLaunchSalesLandingPage() {
           </div>
 
           <div className="snap-preview-grid">
-            {/* Call Preview */}
             <div className="snap-preview-card">
               <div className="snap-preview-header">
                 <h3>Call Demo</h3>
@@ -425,7 +511,6 @@ export default function SnapLaunchSalesLandingPage() {
               </div>
             </div>
 
-            {/* Text Preview */}
             <div className="snap-preview-card">
               <div className="snap-preview-header">
                 <h3>Text Demo</h3>
@@ -475,11 +560,7 @@ export default function SnapLaunchSalesLandingPage() {
           <div className="snap-use-grid">
             {useCases.map((item) => (
               <div key={item.title} className="snap-use-card snap-use-card--accented">
-                {/* colored top stripe */}
-                <div
-                  className="snap-use-stripe"
-                  style={{ background: item.accentColor }}
-                />
+                <div className="snap-use-stripe" style={{ background: item.accentColor }} />
                 <span className="snap-use-emoji">{item.emoji}</span>
                 <span className={`snap-tag ${item.tagClass}`}>{item.tag}</span>
                 <h3>{item.title}</h3>
@@ -525,33 +606,32 @@ export default function SnapLaunchSalesLandingPage() {
 
       <section id="book" className="snap-section">
         <div className="snap-container snap-book-grid">
-          <div className="snap-form-card">            <div className="snap-book-lucio">
-              <img src="/lucio-mascot.png" alt="Lucio Guide" />
-            </div>            <p className="snap-pill" style={{ display: "inline-flex" }}>Book a demo</p>
-            <h2>Let’s install Lucio into your business.</h2>
+          <div className="snap-form-card">
+            <p className="snap-pill" style={{ display: "inline-flex" }}>Book a demo</p>
+            <h2>Let's install Lucio into your business.</h2>
             <p>
-              Show me your business and I’ll map the best SnapLaunch setup for your leads, follow-up flow, and industry use case.
+              Show me your business and I'll map the best SnapLaunch setup for your leads, follow-up flow, and industry use case.
             </p>
 
             <form className="snap-form" onSubmit={handleFormSubmit}>
-              <input 
-                className="snap-input snap-input--field" 
+              <input
+                className="snap-input snap-input--field"
                 placeholder="Your name"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
                 required
               />
-              <input 
-                className="snap-input snap-input--field" 
+              <input
+                className="snap-input snap-input--field"
                 placeholder="Business name"
                 name="business"
                 value={formData.business}
                 onChange={handleInputChange}
                 required
               />
-              <input 
-                className="snap-input snap-input--field" 
+              <input
+                className="snap-input snap-input--field"
                 placeholder="Email"
                 name="email"
                 type="email"
@@ -559,7 +639,7 @@ export default function SnapLaunchSalesLandingPage() {
                 onChange={handleInputChange}
                 required
               />
-              <select 
+              <select
                 className="snap-select snap-select--field"
                 name="industry"
                 value={formData.industry}
@@ -572,16 +652,16 @@ export default function SnapLaunchSalesLandingPage() {
                 <option value="airbnb">🏡 Airbnb</option>
                 <option value="photography">📷 Photography</option>
               </select>
-              <textarea 
-                className="snap-textarea snap-textarea--field" 
+              <textarea
+                className="snap-textarea snap-textarea--field"
                 placeholder="Tell me what you want Lucio to handle..."
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
                 required
               />
-              <button 
-                className="snap-btn snap-submit" 
+              <button
+                className="snap-btn snap-submit"
                 type="submit"
                 disabled={submitting}
               >
@@ -597,18 +677,18 @@ export default function SnapLaunchSalesLandingPage() {
 
           <div className="snap-form-card">
             <p className="snap-pill" style={{ display: "inline-flex" }}>Why it closes</p>
-            <h2>This is not a chatbot. It’s a lead system.</h2>
+            <h2>This is not a chatbot. It's a lead system.</h2>
             <p>
               Lucio gives businesses something they immediately understand: faster replies, captured leads, and follow-up that does not depend on someone checking their phone all day.
             </p>
             <p>
-              That makes the offer easier to sell than “AI” by itself. You are packaging a clear outcome: more conversations, more bookings, and fewer lost opportunities.
+              That makes the offer easier to sell than "AI" by itself. You are packaging a clear outcome: more conversations, more bookings, and fewer lost opportunities.
             </p>
 
             <div className="snap-proof-box snap-proof-box--accented">
               <p>Positioning line</p>
               <strong>
-                “We install Lucio — an AI assistant that answers questions, captures leads, and follows up automatically.”
+                "We install Lucio — an AI assistant that answers questions, captures leads, and follows up automatically."
               </strong>
             </div>
           </div>
@@ -616,7 +696,6 @@ export default function SnapLaunchSalesLandingPage() {
       </section>
 
       <Footer />
-
       <LucioFloatingWidget />
     </div>
   );

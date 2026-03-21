@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLucioRAG } from "@/hooks/useLucioRAG";
 
 const OPTIONS = [
   { value: "contractor", label: "Contractors" },
@@ -26,13 +27,13 @@ export default function LucioFloatingWidget() {
   const [industry, setIndustry] = useState("apartment");
   const [name, setName] = useState("");
   const [input, setInput] = useState("");
-  const [sending, setSending] = useState(false);
-  const [leadSaved, setLeadSaved] = useState(false);
-  const [error, setError] = useState("");
   const [messages, setMessages] = useState([
     { id: generateMessageId(), role: "bot", content: "Hey 👋 I'm Lucio. I can help with pricing, booking, and quick answers. What do you need?" }
   ]);
   const logRef = useRef(null);
+
+  // RAG hook
+  const { ask, loading: sending, error, resetHistory } = useLucioRAG();
 
   const quickActions = useMemo(() => ACTIONS[industry] || ACTIONS.contractor, [industry]);
 
@@ -55,8 +56,7 @@ export default function LucioFloatingWidget() {
   }), []);
 
   useEffect(() => {
-    setLeadSaved(false);
-    setError("");
+    resetHistory();
     setMessages([
       {
         id: generateMessageId(),
@@ -64,47 +64,21 @@ export default function LucioFloatingWidget() {
         content: industryMessages[industry] || industryMessages.contractor
       }
     ]);
-  }, [industry, industryMessages]);
+  }, [industry, industryMessages, resetHistory]);
 
   async function sendMessage(messageText) {
     const trimmed = messageText.trim();
     if (!trimmed || sending) return;
 
-    setError("");
-    setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
+    // Add user message to chat
+    setMessages((prev) => [...prev, { id: generateMessageId(), role: "user", content: trimmed }]);
     setInput("");
-    setSending(true);
 
-    try {
-      const response = await fetch("/api/demo-chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: trimmed,
-          industry,
-          name
-        })
-      });
+    // Get answer from RAG
+    const answer = await ask(trimmed);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Lucio could not respond.");
-      }
-
-      setMessages((prev) => [...prev, { role: "bot", content: data.reply || "I’m ready to help." }]);
-      if (data.leadSaved) setLeadSaved(true);
-    } catch (err) {
-      setError(err.message || "Something went wrong.");
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: "I hit a snag talking to the demo route. Try again in a moment." }
-      ]);
-    } finally {
-      setSending(false);
-    }
+    // Add Lucio's reply
+    setMessages((prev) => [...prev, { id: generateMessageId(), role: "bot", content: answer }]);
   }
 
   return (
@@ -143,6 +117,11 @@ export default function LucioFloatingWidget() {
               {message.content}
             </div>
           ))}
+          {sending && (
+            <div className="lucio-bubble lucio-bot">
+              <span className="lucio-typing">Lucio is thinking...</span>
+            </div>
+          )}
         </div>
 
         <div className="lucio-actions">
@@ -180,7 +159,6 @@ export default function LucioFloatingWidget() {
           </button>
         </div>
 
-        {leadSaved && <div className="lucio-success">Lead captured in demo mode.</div>}
         {error && <div className="lucio-error">{error}</div>}
       </section>
     </>

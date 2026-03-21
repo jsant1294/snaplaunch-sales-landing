@@ -973,3 +973,41 @@ img { display: block; max-width: 100%; }
   .lucio-panel { right: 0; left: 0; width: 100%; max-width: none; bottom: 0; border-radius: 22px 22px 0 0; min-height: 82vh; }
   .lucio-log { max-height: 34vh; }
 }
+/* Hide desktop links on mobile */
+@media (max-width: 768px) {
+  .snap-links--desktop { display: none; }
+  .snap-hamburger { display: flex; }
+}
+
+/* Hide hamburger on desktop */
+@media (min-width: 769px) {
+  .snap-hamburger { display: none; }
+  .snap-mobile-menu { display: none; }
+}
+
+.snap-hamburger {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: currentColor;
+  padding: 4px;
+}
+
+.snap-mobile-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px 16px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  gap: 4px;
+}
+
+.snap-mobile-link {
+  padding: 12px 8px;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.snap-mobile-cta {
+  margin-top: 8px;
+  text-align: center;
+}
