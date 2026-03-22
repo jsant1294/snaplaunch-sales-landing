@@ -1208,3 +1208,29 @@ img { display: block; max-width: 100%; }
     gap: 10px !important;
   }
 }
+.snap-mobile-controls {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .snap-links--desktop {
+    display: none !important;
+  }
+
+  .snap-mobile-controls {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .snap-brand-copy span {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .snap-mobile-controls {
+    display: none !important;
+  }
+}

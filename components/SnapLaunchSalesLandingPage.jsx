@@ -4,11 +4,384 @@ import { useState } from "react";
 import LucioFloatingWidget from "../components/LucioFloatingWidget";
 import Footer from "../components/Footer";
 
+const content = {
+  en: {
+    nav: {
+      howItWorks: "How it works",
+      industries: "Industries",
+      pricing: "Pricing",
+      bookDemo: "Book Demo",
+    },
+    hero: {
+      title: "We build high-converting websites powered by Lucio AI —",
+      sub: "designed to capture leads, respond instantly, and turn visitors into customers.",
+      pill: "Website + AI + SMS in one system",
+      ctaPrimary: "Book a Demo",
+      ctaSecondary: "See Lucio in Action",
+      support:
+        "⚡ Not just a website — a full lead capture system that works 24/7",
+      miniChat: "Lead response coverage",
+      miniText: "Instant follow-up flow",
+      miniVoice: "Contractors, apartments, Airbnb, more",
+    },
+    sections: {
+      pillars: {
+        leadCapture: {
+          title: "Instant Lead Capture",
+          text: "Lucio greets every visitor, answers questions, and locks in serious leads before they bounce — day or night.",
+        },
+        smsFollowup: {
+          title: "SMS Follow-Up",
+          text: "Every qualified lead fires an automatic text follow-up in seconds — so no deal ever goes cold again.",
+        },
+        industryReady: {
+          title: "Industry Ready",
+          text: "Built for contractors, apartments, Airbnb hosts, and service businesses that can't afford to miss a lead.",
+        },
+      },
+      howItWorks: {
+        eyebrow: "How it works",
+        title: "A simple lead engine businesses understand fast.",
+        sub: "SnapLaunch is designed to feel simple to the client while doing powerful work behind the scenes.",
+        steps: [
+          {
+            number: "01",
+            title: "Visitor lands on your page",
+            text: "Lucio appears like a helpful AI receptionist, ready to answer questions and guide the next step.",
+          },
+          {
+            number: "02",
+            title: "Lucio qualifies the lead",
+            text: "The assistant asks smart questions, captures contact details, and moves the visitor toward booking.",
+          },
+          {
+            number: "03",
+            title: "Follow-up happens automatically",
+            text: "The system saves the lead, sends SMS, and routes the prospect into your SnapLaunch dashboard.",
+          },
+        ],
+      },
+      preview: {
+        eyebrow: "Live Preview",
+        title: "See Lucio in action with our demo number.",
+        sub: "Try calling or texting to experience how leads are captured in real-time.",
+        callTitle: "Call Demo",
+        textTitle: "Text Demo",
+        badgeVoice: "Voice",
+        badgeSms: "SMS",
+        callButton: "Call Lucio",
+        textButton: "Text Lucio",
+        fastReply: "⚡ I personally respond within minutes",
+        smsMessages: [
+          "Hi! Tell me about your project and I'll match you with a specialist.",
+          "Looking for a contractor to remodel my kitchen.",
+          "Great! I'll send you available contractors. What's your timeline?",
+        ],
+        smsPlaceholder: "Type your message...",
+      },
+      industries: {
+        eyebrow: "Industries",
+        title: "Built for real businesses that lose leads every day.",
+        sub: "Start with one vertical, then clone the same Lucio-powered engine across multiple offers.",
+        cards: [
+          {
+            title: "Contractors",
+            text: "Turn estimate requests into booked calls with fast, simple lead capture.",
+            tag: "Quotes + calls",
+          },
+          {
+            title: "Apartments",
+            text: "Answer leasing questions, check availability, and book tours around the clock.",
+            tag: "Tours + leasing",
+          },
+          {
+            title: "Airbnb",
+            text: "Handle guest questions, check-in info, and direct booking inquiries without being glued to your phone.",
+            tag: "Guest support",
+          },
+          {
+            title: "Photography",
+            text: "Help prospects ask about sessions, pricing, and availability while Lucio captures every lead.",
+            tag: "Bookings + inquiries",
+          },
+          {
+            title: "Custom Industry Setup",
+            text: "Not seeing your industry here? We can custom-build Lucio around your business, offer, and follow-up flow.",
+            tag: "Custom tailored",
+          },
+        ],
+      },
+      pricing: {
+        eyebrow: "Pricing",
+        banner:
+          "⚡ Most businesses choose Pro — it gives you everything needed to start booking jobs immediately, but we can create a custom system for your brand",
+        title:
+          "We build websites that don’t just look good — they capture leads and follow up automatically.",
+        sub: "We build everything for you — no technical skills needed.",
+        featuredPill: "Best launch offer",
+        roiBadge: "🔥 Best ROI — pays for itself with 1–2 jobs",
+        plans: [
+          {
+            name: "Starter",
+            note: "+ $250 setup",
+            cta: "Start with Starter",
+            features: [
+              "Mobile-first landing page",
+              "Lucio chat widget",
+              "Lead capture flow",
+              "Basic industry setup",
+            ],
+          },
+          {
+            name: "Pro",
+            note: "+ $350 setup",
+            cta: "Choose Pro",
+            features: [
+              "Everything in Starter",
+              "Booking integration",
+              "SMS demo wiring",
+              "Conversion-optimized Lucio flow",
+              "Best fit for most businesses",
+            ],
+          },
+          {
+            name: "Done For You",
+            note: "+ $450 setup",
+            cta: "Book a Strategy Call",
+            features: [
+              "Full system build",
+              "AI assistant setup",
+              "Twilio SMS + voice integration",
+              "Advanced automation flow",
+              "Strategy + launch support",
+            ],
+          },
+        ],
+      },
+      book: {
+        eyebrow: "Book a demo",
+        title: "Let's install Lucio into your business.",
+        sub: "Show me your business and I'll map the best SnapLaunch setup for your leads, follow-up flow, and industry use case.",
+        fields: {
+          name: "Your name",
+          business: "Business name",
+          email: "Email",
+          industry: "Choose industry",
+          message: "Tell me what you want Lucio to handle...",
+        },
+        industries: {
+          contractors: "🔨 Contractors",
+          apartments: "🏢 Apartments",
+          airbnb: "🏡 Airbnb",
+          photography: "📷 Photography",
+        },
+        submit: "Request Demo Setup",
+        submitting: "Submitting...",
+        success: "✓ Demo request received! We'll follow up soon.",
+      },
+      whyItCloses: {
+        eyebrow: "Why it closes",
+        title: "This is not a chatbot. It's a lead system.",
+        p1: "Lucio gives businesses something they immediately understand: faster replies, captured leads, and follow-up that does not depend on someone checking their phone all day.",
+        p2: 'That makes the offer easier to sell than "AI" by itself. You are packaging a clear outcome: more conversations, more bookings, and fewer lost opportunities.',
+        boxLabel: "Positioning line",
+        boxText:
+          '"We build you a high-converting website powered by Lucio — an AI assistant that answers questions, captures leads, and follows up automatically."',
+      },
+    },
+  },
+  es: {
+    nav: {
+      howItWorks: "Cómo funciona",
+      industries: "Industrias",
+      pricing: "Precios",
+      bookDemo: "Agendar Demo",
+    },
+    hero: {
+      title: "Creamos sitios web de alta conversión impulsados por Lucio AI —",
+      sub: "diseñados para captar clientes, responder al instante y convertir visitantes en ventas.",
+      pill: "Sitio web + AI + SMS en un solo sistema",
+      ctaPrimary: "Agendar Demo",
+      ctaSecondary: "Ver a Lucio en acción",
+      support:
+        "⚡ No es solo un sitio web — es un sistema completo de captura de clientes que trabaja 24/7",
+      miniChat: "Cobertura de respuestas",
+      miniText: "Seguimiento instantáneo",
+      miniVoice: "Contratistas, apartamentos, Airbnb y más",
+    },
+    sections: {
+      pillars: {
+        leadCapture: {
+          title: "Captura instantánea de clientes",
+          text: "Lucio recibe a cada visitante, responde preguntas y asegura clientes potenciales antes de que abandonen tu sitio — de día o de noche.",
+        },
+        smsFollowup: {
+          title: "Seguimiento por SMS",
+          text: "Cada cliente calificado activa un seguimiento automático por mensaje en segundos — para que ninguna oportunidad se enfríe.",
+        },
+        industryReady: {
+          title: "Listo para tu industria",
+          text: "Diseñado para contratistas, apartamentos, Airbnb y negocios de servicios que no pueden darse el lujo de perder clientes.",
+        },
+      },
+      howItWorks: {
+        eyebrow: "Cómo funciona",
+        title: "Un sistema de captación simple que cualquier negocio entiende rápido.",
+        sub: "SnapLaunch está diseñado para sentirse simple para el cliente, mientras hace un trabajo poderoso detrás de escena.",
+        steps: [
+          {
+            number: "01",
+            title: "El visitante llega a tu página",
+            text: "Lucio aparece como un recepcionista virtual útil, listo para responder preguntas y guiar el siguiente paso.",
+          },
+          {
+            number: "02",
+            title: "Lucio califica al cliente",
+            text: "El asistente hace preguntas inteligentes, captura los datos de contacto y acerca al visitante a reservar.",
+          },
+          {
+            number: "03",
+            title: "El seguimiento ocurre automáticamente",
+            text: "El sistema guarda el cliente, envía SMS y dirige al prospecto a tu panel de SnapLaunch.",
+          },
+        ],
+      },
+      preview: {
+        eyebrow: "Vista en vivo",
+        title: "Prueba a Lucio en acción con nuestro número demo.",
+        sub: "Llama o envía un mensaje para ver cómo se capturan clientes en tiempo real.",
+        callTitle: "Demo por llamada",
+        textTitle: "Demo por mensaje",
+        badgeVoice: "Voz",
+        badgeSms: "SMS",
+        callButton: "Llamar a Lucio",
+        textButton: "Enviar mensaje a Lucio",
+        fastReply: "⚡ Yo personalmente respondo en minutos",
+        smsMessages: [
+          "¡Hola! Cuéntame sobre tu proyecto y te conectaré con un especialista.",
+          "Busco un contratista para remodelar mi cocina.",
+          "¡Perfecto! Te enviaré contratistas disponibles. ¿Cuál es tu tiempo estimado?",
+        ],
+        smsPlaceholder: "Escribe tu mensaje...",
+      },
+      industries: {
+        eyebrow: "Industrias",
+        title: "Diseñado para negocios reales que pierden clientes todos los días.",
+        sub: "Empieza con un solo nicho y luego replica el mismo sistema impulsado por Lucio en múltiples ofertas.",
+        cards: [
+          {
+            title: "Contratistas",
+            text: "Convierte solicitudes de cotización en llamadas agendadas con una captura de clientes rápida y simple.",
+            tag: "Cotizaciones + llamadas",
+          },
+          {
+            title: "Apartamentos",
+            text: "Responde preguntas de arrendamiento, verifica disponibilidad y agenda tours las 24 horas.",
+            tag: "Tours + arrendamiento",
+          },
+          {
+            title: "Airbnb",
+            text: "Responde preguntas de huéspedes, información de check-in y reservas directas sin vivir pegado al teléfono.",
+            tag: "Soporte a huéspedes",
+          },
+          {
+            title: "Fotografía",
+            text: "Ayuda a prospectos a preguntar por sesiones, precios y disponibilidad mientras Lucio captura cada cliente.",
+            tag: "Reservas + consultas",
+          },
+          {
+            title: "Configuración personalizada",
+            text: "¿No ves tu industria aquí? Podemos personalizar Lucio según tu negocio, oferta y flujo de seguimiento.",
+            tag: "Hecho a tu medida",
+          },
+        ],
+      },
+      pricing: {
+        eyebrow: "Precios",
+        banner:
+          "⚡ La mayoría de los negocios eligen Pro — te da todo lo necesario para empezar a agendar trabajos de inmediato, pero también podemos crear un sistema personalizado para tu marca",
+        title:
+          "Creamos sitios web que no solo se ven bien — capturan clientes y dan seguimiento automáticamente.",
+        sub: "Nosotros construimos todo por ti — no necesitas conocimientos técnicos.",
+        featuredPill: "Mejor oferta de lanzamiento",
+        roiBadge: "🔥 Mejor retorno — se paga solo con 1–2 trabajos",
+        plans: [
+          {
+            name: "Starter",
+            note: "+ $250 de configuración",
+            cta: "Empezar con Starter",
+            features: [
+              "Landing page optimizada para móvil",
+              "Widget de chat Lucio",
+              "Flujo de captura de clientes",
+              "Configuración básica para tu industria",
+            ],
+          },
+          {
+            name: "Pro",
+            note: "+ $350 de configuración",
+            cta: "Elegir Pro",
+            features: [
+              "Todo lo de Starter",
+              "Integración de reservas",
+              "Conexión demo de SMS",
+              "Flujo de Lucio optimizado para convertir",
+              "La mejor opción para la mayoría",
+            ],
+          },
+          {
+            name: "Done For You",
+            note: "+ $450 de configuración",
+            cta: "Agendar llamada estratégica",
+            features: [
+              "Construcción completa del sistema",
+              "Configuración del asistente AI",
+              "Integración Twilio SMS + voz",
+              "Flujo avanzado de automatización",
+              "Estrategia y soporte de lanzamiento",
+            ],
+          },
+        ],
+      },
+      book: {
+        eyebrow: "Agendar demo",
+        title: "Vamos a instalar Lucio en tu negocio.",
+        sub: "Muéstrame tu negocio y te diré cuál es la mejor configuración de SnapLaunch para tus clientes, seguimiento y tipo de industria.",
+        fields: {
+          name: "Tu nombre",
+          business: "Nombre del negocio",
+          email: "Correo electrónico",
+          industry: "Elige tu industria",
+          message: "Cuéntame qué quieres que Lucio gestione...",
+        },
+        industries: {
+          contractors: "🔨 Contratistas",
+          apartments: "🏢 Apartamentos",
+          airbnb: "🏡 Airbnb",
+          photography: "📷 Fotografía",
+        },
+        submit: "Solicitar demo",
+        submitting: "Enviando...",
+        success: "✓ ¡Solicitud recibida! Te contactaremos pronto.",
+      },
+      whyItCloses: {
+        eyebrow: "Por qué funciona",
+        title: "Esto no es un chatbot. Es un sistema de clientes.",
+        p1: "Lucio le da a los negocios algo que entienden al instante: respuestas más rápidas, clientes capturados y seguimiento sin depender de estar revisando el teléfono todo el día.",
+        p2: 'Eso hace que sea más fácil vender esta oferta que vender solo "AI". Estás vendiendo un resultado claro: más conversaciones, más reservas y menos oportunidades perdidas.',
+        boxLabel: "Línea de posicionamiento",
+        boxText:
+          '"Te construimos un sitio web de alta conversión impulsado por Lucio — un asistente AI que responde preguntas, captura clientes y da seguimiento automáticamente."',
+      },
+    },
+  },
+};
+
 const pillars = [
   {
     title: "Instant Lead Capture",
     stat: "24/7",
-    text: "Lucio greets every visitor, answers questions, and locks in serious leads before they bounce — day or night.",
+    text: "",
     icon: (
       <svg
         width="26"
@@ -30,7 +403,7 @@ const pillars = [
   {
     title: "SMS Follow-Up",
     stat: "Instant",
-    text: "Every qualified lead fires an automatic text follow-up in seconds — so no deal ever goes cold again.",
+    text: "",
     icon: (
       <svg
         width="26"
@@ -55,7 +428,7 @@ const pillars = [
   {
     title: "Industry Ready",
     stat: "4+",
-    text: "Built for contractors, apartments, Airbnb hosts, and service businesses that can't afford to miss a lead.",
+    text: "",
     icon: (
       <svg
         width="26"
@@ -80,8 +453,8 @@ const pillars = [
 const steps = [
   {
     number: "01",
-    title: "Visitor lands on your page",
-    text: "Lucio appears like a helpful AI receptionist, ready to answer questions and guide the next step.",
+    title: "",
+    text: "",
     icon: (
       <svg
         width="20"
@@ -102,8 +475,8 @@ const steps = [
   },
   {
     number: "02",
-    title: "Lucio qualifies the lead",
-    text: "The assistant asks smart questions, captures contact details, and moves the visitor toward booking.",
+    title: "",
+    text: "",
     icon: (
       <svg
         width="20"
@@ -121,8 +494,8 @@ const steps = [
   },
   {
     number: "03",
-    title: "Follow-up happens automatically",
-    text: "The system saves the lead, sends SMS, and routes the prospect into your SnapLaunch dashboard.",
+    title: "",
+    text: "",
     icon: (
       <svg
         width="20"
@@ -142,99 +515,77 @@ const steps = [
 
 const useCases = [
   {
-    title: "Contractors",
-    text: "Turn estimate requests into booked calls with fast, simple lead capture.",
-    tag: "Quotes + calls",
+    title: "",
+    text: "",
+    tag: "",
     emoji: "🔨",
     accentColor: "#378ADD",
     tagClass: "tag-blue",
   },
   {
-    title: "Apartments",
-    text: "Answer leasing questions, check availability, and book tours around the clock.",
-    tag: "Tours + leasing",
+    title: "",
+    text: "",
+    tag: "",
     emoji: "🏢",
     accentColor: "#7F77DD",
     tagClass: "tag-purple",
   },
   {
-    title: "Airbnb",
-    text: "Handle guest questions, check-in info, and direct booking inquiries without being glued to your phone.",
-    tag: "Guest support",
+    title: "",
+    text: "",
+    tag: "",
     emoji: "🏡",
     accentColor: "#BA7517",
     tagClass: "tag-amber",
   },
   {
-    title: "Photography",
-    text: "Help prospects ask about sessions, pricing, and availability while Lucio captures every lead.",
-    tag: "Bookings + inquiries",
+    title: "",
+    text: "",
+    tag: "",
     emoji: "📷",
     accentColor: "#1D9E75",
     tagClass: "tag-teal",
   },
   {
-  title: "Custom Industry Setup",
-  text: "Not seeing your industry here? We can custom-build Lucio around your business, offer, and follow-up flow.",
-  tag: "Custom tailored",
-  emoji: "✨",
-  accentColor: "#a78bfa",
-  tagClass: "tag-purple",
-}
+    title: "",
+    text: "",
+    tag: "",
+    emoji: "✨",
+    accentColor: "#a78bfa",
+    tagClass: "tag-purple",
+  },
 ];
 
 const pricing = [
   {
     name: "Starter",
     price: "$399",
-    note: "+ $250 setup",
-    features: [
-      "Mobile-first landing page",
-      "Lucio chat widget",
-      "Lead capture flow",
-      "Basic industry setup",
-    ],
-    cta: "Start with Starter",
+    note: "",
+    features: [],
+    cta: "",
     featured: false,
   },
   {
     name: "Pro",
     price: "$599",
-    note: "+ $350 setup",
-    features: [
-      "Everything in Starter",
-      "Booking integration",
-      "SMS demo wiring",
-      "Conversion-optimized Lucio flow",
-      "Best fit for most businesses",
-    ],
-    cta: "Choose Pro",
+    note: "",
+    features: [],
+    cta: "",
     featured: true,
   },
   {
     name: "Done For You",
     price: "$1299",
-    note: "+ $450 setup",
-    features: [
-      "Full system build",
-      "AI assistant setup",
-      "Twilio SMS + voice integration",
-      "Advanced automation flow",
-      "Strategy + launch support",
-    ],
-    cta: "Book a Strategy Call",
+    note: "",
+    features: [],
+    cta: "",
     featured: false,
   },
 ];
 
-const navLinks = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Industries", href: "#industries" },
-  { label: "Pricing", href: "#pricing" },
-];
-
 export default function SnapLaunchSalesLandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [lang, setLang] = useState("en");
   const [formData, setFormData] = useState({
     name: "",
     business: "",
@@ -247,39 +598,102 @@ export default function SnapLaunchSalesLandingPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState(null);
 
+  const t = content[lang];
+  const S = t.sections;
+
+  const translatedPillars = [
+    {
+      ...pillars[0],
+      title: S.pillars.leadCapture.title,
+      text: S.pillars.leadCapture.text,
+    },
+    {
+      ...pillars[1],
+      title: S.pillars.smsFollowup.title,
+      text: S.pillars.smsFollowup.text,
+    },
+    {
+      ...pillars[2],
+      title: S.pillars.industryReady.title,
+      text: S.pillars.industryReady.text,
+    },
+  ];
+
+  const translatedSteps = steps.map((step, index) => ({
+    ...step,
+    ...S.howItWorks.steps[index],
+  }));
+
+  const translatedUseCases = useCases.map((item, index) => ({
+    ...item,
+    ...S.industries.cards[index],
+  }));
+
+  const translatedPricing = pricing.map((plan, index) => ({
+    ...plan,
+    name: S.pricing.plans[index].name,
+    note: S.pricing.plans[index].note,
+    cta: S.pricing.plans[index].cta,
+    features: S.pricing.plans[index].features,
+  }));
+
+  const navLinks = [
+    { label: t.nav.howItWorks, href: "#how-it-works" },
+    { label: t.nav.industries, href: "#industries" },
+    { label: t.nav.pricing, href: "#pricing" },
+  ];
+
   const cardDetails = {
-    "Instant Lead Capture": {
-      title: "Instant Lead Capture",
-      description:
-        "Lucio greets every visitor, answers questions, and locks in serious leads before they bounce — day or night.",
-      benefits: [
-        "24/7 AI-powered engagement",
-        "No missed leads",
-        "Qualifies and routes prospects instantly",
-      ],
-      cta: "See Lucio in Action",
+    [S.pillars.leadCapture.title]: {
+      title: S.pillars.leadCapture.title,
+      description: S.pillars.leadCapture.text,
+      benefits:
+        lang === "en"
+          ? [
+              "24/7 AI-powered engagement",
+              "No missed leads",
+              "Qualifies and routes prospects instantly",
+            ]
+          : [
+              "Atención con AI 24/7",
+              "Sin clientes perdidos",
+              "Califica y dirige prospectos al instante",
+            ],
+      cta: lang === "en" ? "See Lucio in Action" : "Ver a Lucio en acción",
     },
-    "SMS Follow-Up": {
-      title: "SMS Follow-Up",
-      description:
-        "Every qualified lead fires an automatic text follow-up in seconds — so no deal ever goes cold again.",
-      benefits: [
-        "Instant SMS to every lead",
-        "Automated follow-up flow",
-        "No more cold or lost deals",
-      ],
-      cta: "Book a Demo",
+    [S.pillars.smsFollowup.title]: {
+      title: S.pillars.smsFollowup.title,
+      description: S.pillars.smsFollowup.text,
+      benefits:
+        lang === "en"
+          ? [
+              "Instant SMS to every lead",
+              "Automated follow-up flow",
+              "No more cold or lost deals",
+            ]
+          : [
+              "SMS instantáneo para cada cliente",
+              "Seguimiento automatizado",
+              "No más oportunidades frías o perdidas",
+            ],
+      cta: lang === "en" ? "Book a Demo" : "Agendar Demo",
     },
-    "Industry Ready": {
-      title: "Industry Ready",
-      description:
-        "Built for contractors, apartments, Airbnb hosts, and service businesses that can't afford to miss a lead.",
-      benefits: [
-        "Custom flows for your industry",
-        "Works for contractors, apartments, Airbnb, and more",
-        "Easy to launch and scale",
-      ],
-      cta: "Get Started",
+    [S.pillars.industryReady.title]: {
+      title: S.pillars.industryReady.title,
+      description: S.pillars.industryReady.text,
+      benefits:
+        lang === "en"
+          ? [
+              "Custom flows for your industry",
+              "Works for contractors, apartments, Airbnb, and more",
+              "Easy to launch and scale",
+            ]
+          : [
+              "Flujos personalizados para tu industria",
+              "Funciona para contratistas, apartamentos, Airbnb y más",
+              "Fácil de lanzar y escalar",
+            ],
+      cta: lang === "en" ? "Get Started" : "Comenzar",
     },
   };
 
@@ -302,8 +716,6 @@ export default function SnapLaunchSalesLandingPage() {
         message: "",
       });
       setTimeout(() => setSubmitted(false), 3000);
-    } catch (error) {
-      console.error("Form submission error:", error);
     } finally {
       setSubmitting(false);
     }
@@ -322,7 +734,15 @@ export default function SnapLaunchSalesLandingPage() {
   return (
     <div>
       <nav className="snap-nav">
-        <div className="snap-container snap-nav-inner">
+        <div
+          className="snap-container snap-nav-inner"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: 12,
+          }}
+        >
           <a
             className="snap-brand"
             href="#"
@@ -331,6 +751,7 @@ export default function SnapLaunchSalesLandingPage() {
               display: "flex",
               alignItems: "center",
               gap: 10,
+              minWidth: 0,
             }}
           >
             <img
@@ -341,6 +762,7 @@ export default function SnapLaunchSalesLandingPage() {
                 height: 38,
                 borderRadius: 10,
                 objectFit: "cover",
+                flexShrink: 0,
               }}
             />
             <div className="snap-brand-copy">
@@ -355,48 +777,123 @@ export default function SnapLaunchSalesLandingPage() {
                 {link.label}
               </a>
             ))}
+
             <a className="snap-btn" href="#book">
-              Book Demo
+              {t.nav.bookDemo}
             </a>
+
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <button
+                type="button"
+                onClick={() => setLang("en")}
+                className={lang === "en" ? "snap-btn" : "snap-btn-secondary"}
+              >
+                EN
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang("es")}
+                className={lang === "es" ? "snap-btn" : "snap-btn-secondary"}
+              >
+                ES
+              </button>
+            </div>
           </div>
 
-          <button
-            className="snap-hamburger"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((prev) => !prev)}
+          <div
+            className="snap-mobile-controls"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+            }}
           >
-            {menuOpen ? (
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <div
+              className="snap-mobile-lang"
+              style={{
+                display: "flex",
+                gap: 6,
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => setLang("en")}
+                style={{
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  background:
+                    lang === "en"
+                      ? "#2563eb"
+                      : "rgba(255,255,255,0.08)",
+                  color: "#fff",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  lineHeight: 1,
+                }}
               >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            ) : (
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                EN
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setLang("es")}
+                style={{
+                  padding: "6px 10px",
+                  borderRadius: 8,
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  background:
+                    lang === "es"
+                      ? "#2563eb"
+                      : "rgba(255,255,255,0.08)",
+                  color: "#fff",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  lineHeight: 1,
+                }}
               >
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            )}
-          </button>
+                ES
+              </button>
+            </div>
+
+            <button
+              className="snap-hamburger"
+              aria-label="Toggle menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((prev) => !prev)}
+            >
+              {menuOpen ? (
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              ) : (
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
 
         {menuOpen && (
@@ -411,12 +908,60 @@ export default function SnapLaunchSalesLandingPage() {
                 {link.label}
               </a>
             ))}
+
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+                padding: "12px 0",
+                width: "100%",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setLang("en");
+                  setMenuOpen(false);
+                }}
+                style={{
+                  flex: 1,
+                  padding: "10px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: lang === "en" ? "#6358ff" : "#1f2937",
+                  color: "#fff",
+                  fontWeight: 700,
+                }}
+              >
+                EN
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setLang("es");
+                  setMenuOpen(false);
+                }}
+                style={{
+                  flex: 1,
+                  padding: "10px",
+                  borderRadius: 8,
+                  border: "none",
+                  background: lang === "es" ? "#6358ff" : "#1f2937",
+                  color: "#fff",
+                  fontWeight: 700,
+                }}
+              >
+                ES
+              </button>
+            </div>
+
             <a
               className="snap-btn snap-mobile-cta"
               href="#book"
               onClick={() => setMenuOpen(false)}
             >
-              Book Demo
+              {t.nav.bookDemo}
             </a>
           </div>
         )}
@@ -430,7 +975,6 @@ export default function SnapLaunchSalesLandingPage() {
           minHeight: "100svh",
         }}
       >
-
         <picture
           style={{
             position: "absolute",
@@ -438,27 +982,17 @@ export default function SnapLaunchSalesLandingPage() {
             zIndex: 0,
           }}
         >
-          {/* Desktop */}
           <source
             media="(min-width: 1024px)"
             srcSet="/desktop.webp"
             type="image/webp"
           />
-
-          {/* Tablet */}
           <source
             media="(min-width: 640px)"
             srcSet="/tablet.webp"
             type="image/webp"
           />
-
-          {/* Mobile */}
-          <source
-            srcSet="/mobile.webp"
-            type="image/webp"
-          />
-
-          {/* Fallback */}
+          <source srcSet="/mobile.webp" type="image/webp" />
           <img
             src="/mobile.png"
             alt="Hero"
@@ -487,7 +1021,7 @@ export default function SnapLaunchSalesLandingPage() {
             position: "relative",
             zIndex: 2,
             width: "100%",
-            height: "100%",
+            minHeight: "100svh",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -495,10 +1029,7 @@ export default function SnapLaunchSalesLandingPage() {
           }}
         >
           <div className="snap-hero-content">
-            <h1 className="snap-title">
-              We build high-converting websites powered by{" "}
-              <span style={{ color: "#a78bfa" }}>Lucio AI —</span>
-            </h1>
+            <h1 className="snap-title">{t.hero.title}</h1>
 
             <p
               className="snap-sub"
@@ -509,23 +1040,22 @@ export default function SnapLaunchSalesLandingPage() {
                 margin: "16px 0",
               }}
             >
-              designed to capture leads, respond instantly, and turn visitors
-              into customers.
+              {t.hero.sub}
             </p>
 
-            <span className="snap-pill">Website + AI + SMS in one system</span>
+            <span className="snap-pill">{t.hero.pill}</span>
 
             <div className="snap-cta-row">
               <a className="snap-btn" href="#book">
-                Book a Demo
+                {t.hero.ctaPrimary}
               </a>
               <a className="snap-btn-secondary" href="#call-demo">
-                See Lucio in Action
+                {t.hero.ctaSecondary}
               </a>
             </div>
 
             <p style={{ fontSize: 13, opacity: 0.7, marginTop: 14 }}>
-              ⚡ Not just a website — a full lead capture system that works 24/7
+              {t.hero.support}
             </p>
 
             <div
@@ -547,9 +1077,7 @@ export default function SnapLaunchSalesLandingPage() {
                   cursor: "pointer",
                 }}
                 onClick={() => {
-                  if (typeof window !== "undefined") {
-                    window.dispatchEvent(new Event("open-lucio-chat"));
-                  }
+                  window.dispatchEvent(new Event("open-lucio-chat"));
                 }}
               >
                 <div
@@ -594,7 +1122,7 @@ export default function SnapLaunchSalesLandingPage() {
                   </span>
                   <span style={{ color: "#a78bfa" }}>CHAT</span>
                 </strong>
-                <span>Lead response coverage</span>
+                <span>{t.hero.miniChat}</span>
               </div>
 
               <a
@@ -654,7 +1182,7 @@ export default function SnapLaunchSalesLandingPage() {
                   </span>
                   <span style={{ color: "#34d399" }}>TEXT</span>
                 </strong>
-                <span>Instant follow-up flow</span>
+                <span>{t.hero.miniText}</span>
               </a>
 
               <a
@@ -714,7 +1242,7 @@ export default function SnapLaunchSalesLandingPage() {
                   </span>
                   <span style={{ color: "#fb923c" }}>VOICE</span>
                 </strong>
-                <span>Contractors, apartments, Airbnb, more</span>
+                <span>{t.hero.miniVoice}</span>
               </a>
             </div>
           </div>
@@ -724,7 +1252,7 @@ export default function SnapLaunchSalesLandingPage() {
       <section className="snap-section">
         <div className="snap-container">
           <div className="snap-card-grid">
-            {pillars.map((item) => (
+            {translatedPillars.map((item) => (
               <div
                 key={item.title}
                 className={`snap-panel snap-panel--icon ${item.colorClass}`}
@@ -793,10 +1321,7 @@ export default function SnapLaunchSalesLandingPage() {
         <div
           style={{
             position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
+            inset: 0,
             background: "rgba(10,16,32,0.82)",
             zIndex: 99999,
             display: "flex",
@@ -869,19 +1394,16 @@ export default function SnapLaunchSalesLandingPage() {
         <div className="snap-container">
           <div className="snap-how-it-works-header">
             <div className="snap-section-head">
-              <p>How it works</p>
-              <h2>A simple lead engine businesses understand fast.</h2>
-              <span>
-                SnapLaunch is designed to feel simple to the client while doing
-                powerful work behind the scenes.
-              </span>
+              <p>{S.howItWorks.eyebrow}</p>
+              <h2>{S.howItWorks.title}</h2>
+              <span>{S.howItWorks.sub}</span>
             </div>
           </div>
 
           <div className="snap-steps snap-steps--connected">
-            {steps.map((item, index) => (
+            {translatedSteps.map((item, index) => (
               <div key={item.title} className="snap-step snap-step--card">
-                {index < steps.length - 1 && (
+                {index < translatedSteps.length - 1 && (
                   <div className="snap-step-connector" />
                 )}
                 <div className="snap-step-top">
@@ -899,12 +1421,9 @@ export default function SnapLaunchSalesLandingPage() {
       <section className="snap-section" id="lucio-in-action-section">
         <div className="snap-container">
           <div className="snap-section-head">
-            <p>Live Preview</p>
-            <h2>See Lucio in action with our demo number.</h2>
-            <span>
-              Try calling or texting to experience how leads are captured in
-              real-time.
-            </span>
+            <p>{S.preview.eyebrow}</p>
+            <h2>{S.preview.title}</h2>
+            <span>{S.preview.sub}</span>
           </div>
 
           <div className="snap-preview-grid">
@@ -914,9 +1433,12 @@ export default function SnapLaunchSalesLandingPage() {
               style={{ scrollMarginTop: "120px" }}
             >
               <div className="snap-preview-header">
-                <h3>Call Demo</h3>
-                <span className="snap-preview-badge">Voice</span>
+                <h3>{S.preview.callTitle}</h3>
+                <span className="snap-preview-badge">
+                  {S.preview.badgeVoice}
+                </span>
               </div>
+
               <div className="snap-call-preview">
                 <div className="snap-call-card">
                   <div className="snap-call-content">
@@ -926,9 +1448,12 @@ export default function SnapLaunchSalesLandingPage() {
                           <img src="/lucio-avatar.png" alt="Lucio AI" />
                         </div>
                         <p className="snap-call-name">Lucio AI</p>
-                        <p className="snap-call-status">In Call...</p>
+                        <p className="snap-call-status">
+                          {lang === "en" ? "In Call..." : "En llamada..."}
+                        </p>
                         <div className="snap-call-duration">00:45</div>
                       </div>
+
                       <div className="snap-call-buttons">
                         <button className="snap-call-btn snap-call-btn--mute">
                           <svg
@@ -944,7 +1469,7 @@ export default function SnapLaunchSalesLandingPage() {
                           </svg>
                         </button>
                         <button className="snap-call-btn snap-call-btn--end">
-                          End
+                          {lang === "en" ? "End" : "Finalizar"}
                         </button>
                         <button className="snap-call-btn snap-call-btn--speaker">
                           <svg
@@ -961,6 +1486,7 @@ export default function SnapLaunchSalesLandingPage() {
                       </div>
                     </div>
                   </div>
+
                   <div className="snap-call-footer">
                     <div className="snap-demo-footer">
                       <p className="snap-demo-number">(404) 992-5807</p>
@@ -968,10 +1494,10 @@ export default function SnapLaunchSalesLandingPage() {
                         href="tel:+14049925807"
                         className="snap-btn snap-demo-action"
                       >
-                        Call Lucio
+                        {S.preview.callButton}
                       </a>
                       <span className="snap-demo-pill">
-                        ⚡ I personally respond within minutes
+                        {S.preview.fastReply}
                       </span>
                     </div>
                   </div>
@@ -981,42 +1507,38 @@ export default function SnapLaunchSalesLandingPage() {
 
             <div className="snap-preview-card">
               <div className="snap-preview-header">
-                <h3>Text Demo</h3>
-                <span className="snap-preview-badge">SMS</span>
+                <h3>{S.preview.textTitle}</h3>
+                <span className="snap-preview-badge">{S.preview.badgeSms}</span>
               </div>
+
               <div className="snap-text-preview">
                 <div className="snap-text-screen">
                   <div className="snap-text-header">
                     <p>Lucio AI</p>
-                    <span>Lead Capture Bot</span>
+                    <span>{lang === "en" ? "Lead Capture Bot" : "Bot de captura de clientes"}</span>
                   </div>
+
                   <div className="snap-text-messages">
                     <div className="snap-text-msg snap-text-msg--incoming">
-                      <p>
-                        Hi! Tell me about your project and I'll match you with a
-                        specialist.
-                      </p>
+                      <p>{S.preview.smsMessages[0]}</p>
                     </div>
                     <div className="snap-text-msg snap-text-msg--outgoing">
-                      <p>
-                        Looking for a contractor to remodel my kitchen.
-                      </p>
+                      <p>{S.preview.smsMessages[1]}</p>
                     </div>
                     <div className="snap-text-msg snap-text-msg--incoming">
-                      <p>
-                        Great! I'll send you available contractors. What's your
-                        timeline?
-                      </p>
+                      <p>{S.preview.smsMessages[2]}</p>
                     </div>
                   </div>
+
                   <div className="snap-text-input">
                     <input
                       type="text"
-                      placeholder="Type your message..."
+                      placeholder={S.preview.smsPlaceholder}
                       readOnly
                     />
                   </div>
                 </div>
+
                 <div className="snap-text-footer">
                   <div className="snap-demo-footer">
                     <p className="snap-demo-number">(404) 992-5807</p>
@@ -1024,11 +1546,9 @@ export default function SnapLaunchSalesLandingPage() {
                       href="sms:+14049925807"
                       className="snap-btn snap-demo-action"
                     >
-                      Text Lucio
+                      {S.preview.textButton}
                     </a>
-                    <span className="snap-demo-pill">
-                      ⚡ I personally respond within minutes
-                    </span>
+                    <span className="snap-demo-pill">{S.preview.fastReply}</span>
                   </div>
                 </div>
               </div>
@@ -1040,16 +1560,13 @@ export default function SnapLaunchSalesLandingPage() {
       <section id="industries" className="snap-section">
         <div className="snap-container">
           <div className="snap-section-head">
-            <p>Industries</p>
-            <h2>Built for real businesses that lose leads every day.</h2>
-            <span>
-              Start with one vertical, then clone the same Lucio-powered engine
-              across multiple offers.
-            </span>
+            <p>{S.industries.eyebrow}</p>
+            <h2>{S.industries.title}</h2>
+            <span>{S.industries.sub}</span>
           </div>
 
           <div className="snap-use-grid">
-            {useCases.map((item) => (
+            {translatedUseCases.map((item) => (
               <div
                 key={item.title}
                 className="snap-use-card snap-use-card--accented"
@@ -1071,7 +1588,7 @@ export default function SnapLaunchSalesLandingPage() {
       <section id="pricing" className="snap-section-alt">
         <div className="snap-container">
           <div className="snap-section-head">
-            <p>Pricing</p>
+            <p>{S.pricing.eyebrow}</p>
             <div
               style={{
                 background: "#7c3aed",
@@ -1084,35 +1601,31 @@ export default function SnapLaunchSalesLandingPage() {
                 display: "inline-block",
               }}
             >
-              ⚡ Most businesses choose Pro — it gives you everything needed to
-              start booking jobs immediately, but we can create a custom system
-              for your brand
+              {S.pricing.banner}
             </div>
-            <h2>
-              We build websites that don’t just look good — they capture leads
-              and follow up automatically.
-            </h2>
-            <span>
-              We build everything for you — no technical skills needed.
-            </span>
+            <h2>{S.pricing.title}</h2>
+            <span>{S.pricing.sub}</span>
           </div>
 
           <div className="snap-price-grid">
-            {pricing.map((plan) => (
+            {translatedPricing.map((plan) => (
               <div
                 key={plan.name}
                 className={`snap-price-card ${plan.featured ? "featured" : ""}`}
               >
                 {plan.featured && (
-                  <div className="snap-price-pill">Best launch offer</div>
+                  <div className="snap-price-pill">
+                    {S.pricing.featuredPill}
+                  </div>
                 )}
+
                 <h3>{plan.name}</h3>
                 <div className="snap-price-row">
                   <strong>{plan.price}</strong>
                   <span className="snap-price-note">{plan.note}</span>
                 </div>
 
-                {plan.name === "Pro" && (
+                {plan.featured && (
                   <div
                     style={{
                       background: "#7c3aed",
@@ -1125,7 +1638,7 @@ export default function SnapLaunchSalesLandingPage() {
                       display: "inline-block",
                     }}
                   >
-                    🔥 Best ROI — pays for itself with 1–2 jobs
+                    {S.pricing.roiBadge}
                   </div>
                 )}
 
@@ -1155,18 +1668,15 @@ export default function SnapLaunchSalesLandingPage() {
         <div className="snap-container snap-book-grid">
           <div className="snap-form-card">
             <p className="snap-pill" style={{ display: "inline-flex" }}>
-              Book a demo
+              {S.book.eyebrow}
             </p>
-            <h2>Let's install Lucio into your business.</h2>
-            <p>
-              Show me your business and I'll map the best SnapLaunch setup for
-              your leads, follow-up flow, and industry use case.
-            </p>
+            <h2>{S.book.title}</h2>
+            <p>{S.book.sub}</p>
 
             <form className="snap-form" onSubmit={handleFormSubmit}>
               <input
                 className="snap-input snap-input--field"
-                placeholder="Your name"
+                placeholder={S.book.fields.name}
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
@@ -1174,7 +1684,7 @@ export default function SnapLaunchSalesLandingPage() {
               />
               <input
                 className="snap-input snap-input--field"
-                placeholder="Business name"
+                placeholder={S.book.fields.business}
                 name="business"
                 value={formData.business}
                 onChange={handleInputChange}
@@ -1182,7 +1692,7 @@ export default function SnapLaunchSalesLandingPage() {
               />
               <input
                 className="snap-input snap-input--field"
-                placeholder="Email"
+                placeholder={S.book.fields.email}
                 name="email"
                 type="email"
                 value={formData.email}
@@ -1196,15 +1706,15 @@ export default function SnapLaunchSalesLandingPage() {
                 onChange={handleInputChange}
                 required
               >
-                <option value="">Choose industry</option>
-                <option value="contractors">🔨 Contractors</option>
-                <option value="apartments">🏢 Apartments</option>
-                <option value="airbnb">🏡 Airbnb</option>
-                <option value="photography">📷 Photography</option>
+                <option value="">{S.book.fields.industry}</option>
+                <option value="contractors">{S.book.industries.contractors}</option>
+                <option value="apartments">{S.book.industries.apartments}</option>
+                <option value="airbnb">{S.book.industries.airbnb}</option>
+                <option value="photography">{S.book.industries.photography}</option>
               </select>
               <textarea
                 className="snap-textarea snap-textarea--field"
-                placeholder="Tell me what you want Lucio to handle..."
+                placeholder={S.book.fields.message}
                 name="message"
                 value={formData.message}
                 onChange={handleInputChange}
@@ -1215,39 +1725,25 @@ export default function SnapLaunchSalesLandingPage() {
                 type="submit"
                 disabled={submitting}
               >
-                {submitting ? "Submitting..." : "Request Demo Setup"}
+                {submitting ? S.book.submitting : S.book.submit}
               </button>
               {submitted && (
-                <div className="snap-form-success">
-                  ✓ Demo request received! We'll follow up soon.
-                </div>
+                <div className="snap-form-success">{S.book.success}</div>
               )}
             </form>
           </div>
 
           <div className="snap-form-card">
             <p className="snap-pill" style={{ display: "inline-flex" }}>
-              Why it closes
+              {S.whyItCloses.eyebrow}
             </p>
-            <h2>This is not a chatbot. It's a lead system.</h2>
-            <p>
-              Lucio gives businesses something they immediately understand:
-              faster replies, captured leads, and follow-up that does not depend
-              on someone checking their phone all day.
-            </p>
-            <p>
-              That makes the offer easier to sell than "AI" by itself. You are
-              packaging a clear outcome: more conversations, more bookings, and
-              fewer lost opportunities.
-            </p>
+            <h2>{S.whyItCloses.title}</h2>
+            <p>{S.whyItCloses.p1}</p>
+            <p>{S.whyItCloses.p2}</p>
 
             <div className="snap-proof-box snap-proof-box--accented">
-              <p>Positioning line</p>
-              <strong>
-                "We build you a high-converting website powered by Lucio — an AI
-                assistant that answers questions, captures leads, and follows up
-                automatically."
-              </strong>
+              <p>{S.whyItCloses.boxLabel}</p>
+              <strong>{S.whyItCloses.boxText}</strong>
             </div>
           </div>
         </div>
