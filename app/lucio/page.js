@@ -4,6 +4,8 @@ import Link from "next/link";
 import Footer from "../../components/Footer";
 import LucioFloatingWidget from "../../components/LucioFloatingWidget";
 import Navbar from "../../components/Navbar";
+import { Suspense } from "react";
+
 
 const content = {
 
@@ -136,13 +138,16 @@ export default function LucioPage({ searchParams }) {
 
   return (
     <main className="lucio-page" style={{ position: "relative", overflow: "hidden" }}>
-      <Navbar
-        navLinks={navLinks}
-        brandHref={`/?lang=${lang}`}
-        ctaHref="#buy"
-        ctaLabel={lang === "es" ? "Quiero Lucio" : "Get Lucio"}
-      />
-      <section className="lucio-shell">
+  <Suspense fallback={null}>
+    <Navbar
+      navLinks={navLinks}
+      brandHref={`/?lang=${lang}`}
+      ctaHref="#buy"
+      ctaLabel={lang === "es" ? "Quiero Lucio" : "Get Lucio"}
+    />
+  </Suspense>
+  <section className="lucio-shell">
+
         <section id="top" className="lucio-hero" style={{ position: "relative", overflow: "hidden" }}>
           <div
             className="lucio-hero-bg"
