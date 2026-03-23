@@ -12,9 +12,7 @@ type Memory = {
   confirmed?: boolean;
 };
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+type SupportedLang = "en" | "es";
 
 const SYSTEM_PROMPT = `
 You are Lucio, a high-converting AI sales assistant for SnapLaunch.
@@ -117,6 +115,10 @@ function fallbackReply(message: string = "", industry: string = "") {
   return "";
 }
 
+function pickCopy(lang: SupportedLang, enText: string, esText: string) {
+  return lang === "es" ? esText : enText;
+}
+
 function extractMemory(message: string, memory: Memory = {}) {
   const updated: Memory = { ...memory };
   const clean = message.trim();
@@ -204,17 +206,36 @@ function getLeadPrompt(field: "name" | "email" | "phone", memory: Memory) {
 
 export async function POST(req: NextRequest) {
   try {
+    const apiKey = process.env.OPENAI_API_KEY;
     const body = await req.json();
 
     const message = body.message || "";
     const industry = body.industry || "general";
     const memory: Memory = body.memory || {};
+    const lang: SupportedLang = body.lang === "es" ? "es" : "en";
 
     const lower = message.toLowerCase();
     const updatedMemory = extractMemory(message, {
       ...memory,
       industry,
     });
+
+    if (!apiKey) {
+      return NextResponse.json(
+        {
+          ok: false,
+          reply: pickCopy(
+            lang,
+            "Lucio chat is temporarily unavailable. Please call or text us and we’ll help you directly.",
+            "El chat de Lucio no está disponible por el momento. Llámanos o envíanos un mensaje y te ayudamos directamente."
+          ),
+          memory: updatedMemory,
+        },
+        { status: 503 }
+      );
+    }
+
+    const client = new OpenAI({ apiKey });
 
     const isHighIntent =
       updatedMemory.intent === "demo" ||
@@ -224,8 +245,11 @@ export async function POST(req: NextRequest) {
     if (isHighIntent && updatedMemory.phone) {
       return NextResponse.json({
         ok: true,
-        reply:
+        reply: pickCopy(
+          lang,
           "🔥 Perfect. You're ready. Tap ‘Start My Setup’ or call now — I’ll personally walk you through everything.",
+          "🔥 Perfecto. Ya estás listo. Toca ‘Empezar mi configuración’ o llama ahora y te guío personalmente."
+        ),
         memory: updatedMemory,
         leadCaptured: true,
       });
@@ -302,7 +326,11 @@ export async function POST(req: NextRequest) {
 
         return NextResponse.json({
           ok: true,
-          reply: `Perfect — I’ve got your info, ${updatedMemory.name}. The fastest next step is to call or text now so we can map your setup.`,
+          reply: pickCopy(
+            lang,
+            `Perfect — I’ve got your info, ${updatedMemory.name}. The fastest next step is to call or text now so we can map your setup.`,
+            `Perfecto — ya tengo tu información, ${updatedMemory.name}. El siguiente paso más rápido es llamar o enviar mensaje ahora para definir tu configuración.`
+          ),
           memory: updatedMemory,
           leadCaptured: true,
           lead: {
@@ -317,7 +345,11 @@ export async function POST(req: NextRequest) {
 
       return NextResponse.json({
         ok: true,
-        reply: "You can call or text anytime to get started 👍",
+        reply: pickCopy(
+          lang,
+          "You can call or text anytime to get started 👍",
+          "Puedes llamar o enviar mensaje en cualquier momento para empezar 👍"
+        ),
         memory: updatedMemory,
         leadCaptured: true,
         lead: {
@@ -335,8 +367,11 @@ export async function POST(req: NextRequest) {
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json({
         ok: true,
-        reply:
+        reply: pickCopy(
+          lang,
           "I can help with pricing, demos, and setup. Want pricing or a demo first?",
+          "Puedo ayudarte con precios, demos y configuración. ¿Quieres ver precios o una demo primero?"
+        ),
         memory: updatedMemory,
         leadCaptured: false,
         lead: null,
@@ -348,6 +383,10 @@ export async function POST(req: NextRequest) {
       temperature: 0.5,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
+        {
+          role: "system",
+          content: lang === "es" ? "Respond in Spanish." : "Respond in English.",
+        },
         { role: "system", content: `Context:\n${context}` },
         {
           role: "user",
@@ -358,7 +397,11 @@ export async function POST(req: NextRequest) {
 
     const reply =
       completion.choices?.[0]?.message?.content?.trim() ||
-      "I can help with pricing, demos, and setup. Want pricing or a demo first?";
+      pickCopy(
+        lang,
+        "I can help with pricing, demos, and setup. Want pricing or a demo first?",
+        "Puedo ayudarte con precios, demos y configuración. ¿Quieres ver precios o una demo primero?"
+      );
 
     return NextResponse.json({
       ok: true,
