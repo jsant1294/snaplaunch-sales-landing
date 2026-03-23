@@ -1,5 +1,11 @@
-export default function Footer() {
+export default function Footer({ links }) {
   const currentYear = new Date().getFullYear();
+  const resolvedLinks = links || [
+    { label: "How it works", href: "#how-it-works" },
+    { label: "Industries", href: "#industries" },
+    { label: "Pricing", href: "#pricing" },
+    { label: "Book Demo", href: "#book" },
+  ];
 
   return (
     <footer className="snap-footer-simple">
@@ -10,10 +16,11 @@ export default function Footer() {
             <p>Built for mobile-first demos, outbound selling, and client conversion.</p>
           </div>
           <div className="snap-footer-links">
-            <a href="#how-it-works">How it works</a>
-            <a href="#industries">Industries</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#book">Book Demo</a>
+            {resolvedLinks.map((link) => (
+              <a key={link.label} href={link.href}>
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
         <div className="snap-footer-simple-copy">

@@ -106,6 +106,12 @@ export default function LucioPageClient() {
   const searchParams = useSearchParams();
   const lang = searchParams.get("lang") === "es" ? "es" : "en";
   const t = content[lang];
+  const footerLinks = [
+    { label: lang === "es" ? "Quién es Lucio" : "Who is Lucio?", href: "#top" },
+    { label: lang === "es" ? "Beneficios" : "Benefits", href: "#benefits" },
+    { label: "Demo", href: "#video" },
+    { label: "ROI", href: "#buy" },
+  ];
 
   const navLinks = [
     {
@@ -458,7 +464,7 @@ export default function LucioPageClient() {
           </div>
         </section>
       </section>
-      <Footer />
+      <Footer links={footerLinks} />
       <LucioFloatingWidget lang={lang} />
     </main>
   );
