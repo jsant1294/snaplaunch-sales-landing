@@ -8,6 +8,8 @@ export default function Navbar({
   brandHref,
   ctaHref,
   ctaLabel,
+  currentLang,
+  langHrefMap,
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -15,7 +17,7 @@ export default function Navbar({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const lang = searchParams.get("lang") || "en";
+  const lang = currentLang || searchParams.get("lang") || "en";
 
   const labels = {
     en: {
@@ -48,6 +50,12 @@ export default function Navbar({
   ];
 
   function switchLang(nextLang) {
+    if (langHrefMap?.[nextLang]) {
+      router.push(langHrefMap[nextLang]);
+      setMenuOpen(false);
+      return;
+    }
+
     const params = new URLSearchParams(searchParams.toString());
     params.set("lang", nextLang);
     router.push(`${pathname}?${params.toString()}`);

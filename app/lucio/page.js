@@ -144,6 +144,11 @@ export default function LucioPage({ searchParams }) {
       brandHref={`/?lang=${lang}`}
       ctaHref="#buy"
       ctaLabel={lang === "es" ? "Quiero Lucio" : "Get Lucio"}
+      currentLang={lang}
+      langHrefMap={{
+        en: "/lucio?lang=en",
+        es: "/lucio?lang=es",
+      }}
     />
   </Suspense>
   <section className="lucio-shell">
