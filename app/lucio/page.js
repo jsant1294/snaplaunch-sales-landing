@@ -1,13 +1,12 @@
-"use client";
+
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import Footer from "../../components/Footer";
 import LucioFloatingWidget from "../../components/LucioFloatingWidget";
 import Navbar from "../../components/Navbar";
 
-
 const content = {
+
   en: {
     navHome: "← Back to Home",
     switchLabel: "Language",
@@ -103,9 +102,9 @@ function MiniCard({ title, text, accentClass }) {
   );
 }
 
-export default function LucioPage() {
-  const searchParams = useSearchParams();
-  const lang = searchParams.get("lang") === "es" ? "es" : "en";
+export default function LucioPage({ searchParams }) {
+  const lang = searchParams?.lang === "es" ? "es" : "en";
+
   const t = content[lang];
   const navLinks = [
     {
