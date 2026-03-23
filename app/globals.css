@@ -91,6 +91,9 @@ img { display: block; max-width: 100%; }
   color: #ede9fe;
 }
 .snap-nav-lang-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 56px;
   min-height: 48px;
   padding: 0 18px;
@@ -98,8 +101,12 @@ img { display: block; max-width: 100%; }
   border: 1px solid rgba(255,255,255,0.14);
   background: rgba(255,255,255,0.06);
   color: #fff;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
   font-weight: 800;
   cursor: pointer;
+  appearance: none;
   transition: transform .18s ease, background .18s ease, border-color .18s ease, box-shadow .18s ease;
 }
 .snap-nav-lang-btn:hover {
