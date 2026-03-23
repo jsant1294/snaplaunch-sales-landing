@@ -471,7 +471,7 @@ export default function LucioPage({ searchParams }) {
         </section>
       </section>
       <Footer />
-      <LucioFloatingWidget />
+      <LucioFloatingWidget lang={lang} />
     </main>
   );
 }
