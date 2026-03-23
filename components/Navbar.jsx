@@ -89,23 +89,43 @@ export default function Navbar({
         </nav>
 
         <div className="snap-nav-actions">
-          <div className="snap-nav-lang-wrap">
-            <button
-              type="button"
-              onClick={() => switchLang("en")}
-              className={`snap-nav-lang-btn ${lang === "en" ? "is-active" : ""}`}
-            >
-              EN
-            </button>
+   <div className="snap-nav-lang-wrap">
+  {langHrefMap ? (
+    <>
+      <a
+        href={langHrefMap.en}
+        className={`snap-nav-lang-btn ${lang === "en" ? "is-active" : ""}`}
+      >
+        EN
+      </a>
+      <a
+        href={langHrefMap.es}
+        className={`snap-nav-lang-btn ${lang === "es" ? "is-active" : ""}`}
+      >
+        ES
+      </a>
+    </>
+  ) : (
+    <>
+      <button
+        type="button"
+        onClick={() => switchLang("en")}
+        className={`snap-nav-lang-btn ${lang === "en" ? "is-active" : ""}`}
+      >
+        EN
+      </button>
 
-            <button
-              type="button"
-              onClick={() => switchLang("es")}
-              className={`snap-nav-lang-btn ${lang === "es" ? "is-active" : ""}`}
-            >
-              ES
-            </button>
-          </div>
+      <button
+        type="button"
+        onClick={() => switchLang("es")}
+        className={`snap-nav-lang-btn ${lang === "es" ? "is-active" : ""}`}
+      >
+        ES
+      </button>
+    </>
+  )}
+</div>
+
 
           <a
             href={ctaHref || "#book"}
@@ -134,20 +154,41 @@ export default function Navbar({
             </a>
           ))}
           <div className="snap-mobile-controls">
-            <button
-              type="button"
-              onClick={() => switchLang("en")}
-              className={`snap-nav-lang-btn ${lang === "en" ? "is-active" : ""}`}
-            >
-              EN
-            </button>
-            <button
-              type="button"
-              onClick={() => switchLang("es")}
-              className={`snap-nav-lang-btn ${lang === "es" ? "is-active" : ""}`}
-            >
-              ES
-            </button>
+            {langHrefMap ? (
+              <>
+                <a
+                  href={langHrefMap.en}
+                  className={`snap-nav-lang-btn ${lang === "en" ? "is-active" : ""}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  EN
+                </a>
+                <a
+                  href={langHrefMap.es}
+                  className={`snap-nav-lang-btn ${lang === "es" ? "is-active" : ""}`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  ES
+                </a>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => switchLang("en")}
+                  className={`snap-nav-lang-btn ${lang === "en" ? "is-active" : ""}`}
+                >
+                  EN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchLang("es")}
+                  className={`snap-nav-lang-btn ${lang === "es" ? "is-active" : ""}`}
+                >
+                  ES
+                </button>
+              </>
+            )}
           </div>
           <a href={ctaHref || "#book"} className="snap-btn snap-mobile-cta" onClick={() => setMenuOpen(false)}>
             {ctaLabel || t.bookDemo}
