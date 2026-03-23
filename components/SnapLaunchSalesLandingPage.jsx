@@ -8,6 +8,7 @@ const content = {
   en: {
     nav: {
       howItWorks: "How it works",
+      whoIsLucio: "Who is Lucio?",
       industries: "Industries",
       pricing: "Pricing",
       bookDemo: "Book Demo",
@@ -20,6 +21,11 @@ const content = {
       ctaSecondary: "See Lucio in Action",
       support:
         "⚡ Not just a website — a full lead capture system that works 24/7",
+      proof: [
+        { value: "< 60 sec", label: "target first response" },
+        { value: "24/7", label: "lead capture coverage" },
+        { value: "1 system", label: "site + AI + follow-up" },
+      ],
       miniChat: "Lead response coverage",
       miniText: "Instant follow-up flow",
       miniVoice: "Contractors, apartments, Airbnb, more",
@@ -105,10 +111,38 @@ const content = {
             tag: "Bookings + inquiries",
           },
           {
+            title: "Plumbers",
+            text: "Capture emergency service requests, quote questions, and appointment needs before the prospect calls someone else.",
+            tag: "Emergency + service calls",
+          },
+          {
+            title: "Electricians",
+            text: "Answer wiring, repair, and install inquiries fast while Lucio routes serious leads into your booking flow.",
+            tag: "Repairs + installs",
+          },
+          {
+            title: "Painters",
+            text: "Turn quote requests into booked walkthroughs by handling project details, timelines, and follow-up automatically.",
+            tag: "Quotes + walkthroughs",
+          },
+          {
             title: "Custom Industry Setup",
             text: "Not seeing your industry here? We can custom-build Lucio around your business, offer, and follow-up flow.",
             tag: "Custom tailored",
           },
+        ],
+      },
+      caseStudy: {
+        eyebrow: "Why clients buy",
+        title: "A simple offer potential clients understand immediately.",
+        sub: "Instead of selling abstract AI, you are selling faster response, captured leads, and booked work.",
+        scenarioTitle: "Example pitch",
+        scenarioText:
+          '"We install a high-converting website with Lucio AI so your business can answer visitors instantly, capture contact details, and follow up automatically."',
+        stats: [
+          { value: "Faster", label: "response experience from the first visit" },
+          { value: "More", label: "qualified leads captured before they bounce" },
+          { value: "Less", label: "manual chasing and missed opportunities" },
         ],
       },
       pricing: {
@@ -174,6 +208,9 @@ const content = {
           apartments: "🏢 Apartments",
           airbnb: "🏡 Airbnb",
           photography: "📷 Photography",
+          plumbers: "🪠 Plumbers",
+          electricians: "💡 Electricians",
+          painters: "🎨 Painters",
         },
         submit: "Request Demo Setup",
         submitting: "Submitting...",
@@ -193,6 +230,7 @@ const content = {
   es: {
     nav: {
       howItWorks: "Cómo funciona",
+      whoIsLucio: "¿Quién es Lucio?",
       industries: "Industrias",
       pricing: "Precios",
       bookDemo: "Agendar Demo",
@@ -205,6 +243,11 @@ const content = {
       ctaSecondary: "Ver a Lucio en acción",
       support:
         "⚡ No es solo un sitio web — es un sistema completo de captura de clientes que trabaja 24/7",
+      proof: [
+        { value: "< 60 seg", label: "meta de primera respuesta" },
+        { value: "24/7", label: "cobertura de captación" },
+        { value: "1 sistema", label: "sitio + AI + seguimiento" },
+      ],
       miniChat: "Cobertura de respuestas",
       miniText: "Seguimiento instantáneo",
       miniVoice: "Contratistas, apartamentos, Airbnb y más",
@@ -290,10 +333,38 @@ const content = {
             tag: "Reservas + consultas",
           },
           {
+            title: "Plomeros",
+            text: "Captura solicitudes urgentes, preguntas de servicio y citas antes de que el prospecto llame a otro negocio.",
+            tag: "Emergencias + servicios",
+          },
+          {
+            title: "Electricistas",
+            text: "Responde rápido a consultas sobre reparaciones, instalaciones y cableado mientras Lucio dirige clientes serios a tu agenda.",
+            tag: "Reparaciones + instalaciones",
+          },
+          {
+            title: "Pintores",
+            text: "Convierte solicitudes de cotización en visitas agendadas gestionando detalles del proyecto, tiempos y seguimiento automático.",
+            tag: "Cotizaciones + visitas",
+          },
+          {
             title: "Configuración personalizada",
             text: "¿No ves tu industria aquí? Podemos personalizar Lucio según tu negocio, oferta y flujo de seguimiento.",
             tag: "Hecho a tu medida",
           },
+        ],
+      },
+      caseStudy: {
+        eyebrow: "Por qué compran",
+        title: "Una oferta simple que los clientes entienden de inmediato.",
+        sub: "En lugar de vender AI abstracta, estás vendiendo respuestas rápidas, leads capturados y más trabajo agendado.",
+        scenarioTitle: "Ejemplo de pitch",
+        scenarioText:
+          '"Instalamos un sitio de alta conversión con Lucio AI para que tu negocio responda visitantes al instante, capture datos y haga seguimiento automático."',
+        stats: [
+          { value: "Más rápida", label: "la experiencia de respuesta desde la primera visita" },
+          { value: "Más", label: "leads calificados capturados antes de que se vayan" },
+          { value: "Menos", label: "seguimiento manual y oportunidades perdidas" },
         ],
       },
       pricing: {
@@ -359,6 +430,9 @@ const content = {
           apartments: "🏢 Apartamentos",
           airbnb: "🏡 Airbnb",
           photography: "📷 Fotografía",
+          plumbers: "🪠 Plomeros",
+          electricians: "💡 Electricistas",
+          painters: "🎨 Pintores",
         },
         submit: "Solicitar demo",
         submitting: "Enviando...",
@@ -461,15 +535,17 @@ const steps = [
         height="20"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#6358ff"
+        stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <rect x="3" y="4" width="18" height="14" rx="3" />
+        <path d="M8 20h8" />
+        <path d="M12 18v2" />
+        <path d="M7.5 9.5h4" />
+        <circle cx="15.5" cy="11.5" r="2.5" />
+        <path d="m17.3 13.3 1.7 1.7" />
       </svg>
     ),
   },
@@ -483,12 +559,15 @@ const steps = [
         height="20"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#6358ff"
+        stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        <path d="M8 9h8" />
+        <path d="M8 13h5" />
+        <path d="m15.5 8.5 1 1 2-2" />
       </svg>
     ),
   },
@@ -502,12 +581,17 @@ const steps = [
         height="20"
         viewBox="0 0 24 24"
         fill="none"
-        stroke="#6358ff"
+        stroke="currentColor"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        <rect x="3" y="5" width="6" height="4" rx="1.5" />
+        <rect x="15" y="5" width="6" height="4" rx="1.5" />
+        <rect x="9" y="15" width="6" height="4" rx="1.5" />
+        <path d="M9 7h6" />
+        <path d="M12 9v6" />
+        <path d="M12 15h0" />
       </svg>
     ),
   },
@@ -545,6 +629,30 @@ const useCases = [
     emoji: "📷",
     accentColor: "#1D9E75",
     tagClass: "tag-teal",
+  },
+  {
+    title: "",
+    text: "",
+    tag: "",
+    emoji: "🚿",
+    accentColor: "#378ADD",
+    tagClass: "tag-blue",
+  },
+  {
+    title: "",
+    text: "",
+    tag: "",
+    emoji: "⚡",
+    accentColor: "#1D9E75",
+    tagClass: "tag-teal",
+  },
+  {
+    title: "",
+    text: "",
+    tag: "",
+    emoji: "🖌️",
+    accentColor: "#BA7517",
+    tagClass: "tag-amber",
   },
   {
     title: "",
@@ -622,6 +730,8 @@ export default function SnapLaunchSalesLandingPage() {
   const translatedSteps = steps.map((step, index) => ({
     ...step,
     ...S.howItWorks.steps[index],
+    colorClass:
+      index === 0 ? "snap-step--purple" : index === 1 ? "snap-step--teal" : "snap-step--amber",
   }));
 
   const translatedUseCases = useCases.map((item, index) => ({
@@ -639,6 +749,7 @@ export default function SnapLaunchSalesLandingPage() {
 
   const navLinks = [
     { label: t.nav.howItWorks, href: "#how-it-works" },
+    { label: t.nav.whoIsLucio, href: `/lucio?lang=${lang}`, className: "snap-nav-link-lucio" },
     { label: t.nav.industries, href: "#industries" },
     { label: t.nav.pricing, href: "#pricing" },
   ];
@@ -660,6 +771,7 @@ export default function SnapLaunchSalesLandingPage() {
               "Califica y dirige prospectos al instante",
             ],
       cta: lang === "en" ? "See Lucio in Action" : "Ver a Lucio en acción",
+      href: "#lucio-in-action-section",
     },
     [S.pillars.smsFollowup.title]: {
       title: S.pillars.smsFollowup.title,
@@ -677,6 +789,7 @@ export default function SnapLaunchSalesLandingPage() {
               "No más oportunidades frías o perdidas",
             ],
       cta: lang === "en" ? "Book a Demo" : "Agendar Demo",
+      href: "#book",
     },
     [S.pillars.industryReady.title]: {
       title: S.pillars.industryReady.title,
@@ -694,6 +807,7 @@ export default function SnapLaunchSalesLandingPage() {
               "Fácil de lanzar y escalar",
             ],
       cta: lang === "en" ? "Get Started" : "Comenzar",
+      href: "#industries",
     },
   };
 
@@ -754,17 +868,12 @@ export default function SnapLaunchSalesLandingPage() {
               minWidth: 0,
             }}
           >
-            <img
-              src="/lucio-logo.png"
-              alt="Lucio logo"
-              style={{
-                width: 38,
-                height: 38,
-                borderRadius: 10,
-                objectFit: "cover",
-                flexShrink: 0,
-              }}
-            />
+            <div className="snap-brand-badge">
+              <img
+                src="/lucio-logo.png"
+                alt="Lucio logo"
+              />
+            </div>
             <div className="snap-brand-copy">
               <strong>SnapLaunch AI</strong>
               <span>Lucio-powered sales system</span>
@@ -773,7 +882,7 @@ export default function SnapLaunchSalesLandingPage() {
 
           <div className="snap-links snap-links--desktop">
             {navLinks.map((link) => (
-              <a key={link.label} href={link.href}>
+              <a key={link.label} href={link.href} className={link.className}>
                 {link.label}
               </a>
             ))}
@@ -786,14 +895,14 @@ export default function SnapLaunchSalesLandingPage() {
               <button
                 type="button"
                 onClick={() => setLang("en")}
-                className={lang === "en" ? "snap-btn" : "snap-btn-secondary"}
+                className={`snap-nav-lang-btn ${lang === "en" ? "is-active" : ""}`}
               >
                 EN
               </button>
               <button
                 type="button"
                 onClick={() => setLang("es")}
-                className={lang === "es" ? "snap-btn" : "snap-btn-secondary"}
+                className={`snap-nav-lang-btn ${lang === "es" ? "is-active" : ""}`}
               >
                 ES
               </button>
@@ -902,7 +1011,7 @@ export default function SnapLaunchSalesLandingPage() {
               <a
                 key={link.label}
                 href={link.href}
-                className="snap-mobile-link"
+                className={`snap-mobile-link ${link.className || ""}`}
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
@@ -1049,14 +1158,59 @@ export default function SnapLaunchSalesLandingPage() {
               <a className="snap-btn" href="#book">
                 {t.hero.ctaPrimary}
               </a>
-              <a className="snap-btn-secondary" href="#call-demo">
+
+              <a className="snap-btn-secondary snap-btn-secondary--action" href="#call-demo">
+                <span className="snap-btn-icon snap-btn-icon--action" aria-hidden="true">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polygon points="5 3 19 12 5 21 5 3" />
+                  </svg>
+                </span>
                 {t.hero.ctaSecondary}
+              </a>
+
+              <a
+                className="snap-btn-secondary snap-btn-secondary--chat"
+                href={`/lucio?lang=${lang}`}
+              >
+                <span className="snap-btn-icon snap-btn-icon--chat" aria-hidden="true">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                  </svg>
+                </span>
+                {lang === "es" ? "¿Quién es Lucio?" : "Who is Lucio?"}
               </a>
             </div>
 
             <p style={{ fontSize: 13, opacity: 0.7, marginTop: 14 }}>
               {t.hero.support}
             </p>
+
+            <div className="snap-proof-strip">
+              {t.hero.proof.map((item) => (
+                <div key={item.label} className="snap-proof-pill">
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </div>
 
             <div
               className="snap-mini-grid"
@@ -1297,17 +1451,7 @@ export default function SnapLaunchSalesLandingPage() {
                   >
                     {item.icon}
                   </div>
-                  <span
-                    style={{
-                      fontSize: "2rem",
-                      fontWeight: 800,
-                      color: item.accent,
-                      letterSpacing: "-1px",
-                      opacity: 0.9,
-                    }}
-                  >
-                    {item.stat}
-                  </span>
+                  <span className="snap-panel-stat">{item.stat}</span>
                 </div>
                 <h3 style={{ marginBottom: 8 }}>{item.title}</h3>
                 <p>{item.text}</p>
@@ -1370,22 +1514,25 @@ export default function SnapLaunchSalesLandingPage() {
                 </li>
               ))}
             </ul>
-            <button
+            <a
+              href={modalContent.href}
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
                 background: "linear-gradient(90deg,#6358ff,#a78bfa)",
                 color: "#fff",
-                border: "none",
                 borderRadius: 8,
                 padding: "12px 28px",
                 fontWeight: 700,
                 fontSize: 16,
-                cursor: "pointer",
                 marginTop: 8,
+                textDecoration: "none",
               }}
               onClick={closeModal}
             >
               {modalContent.cta}
-            </button>
+            </a>
           </div>
         </div>
       )}
@@ -1402,7 +1549,7 @@ export default function SnapLaunchSalesLandingPage() {
 
           <div className="snap-steps snap-steps--connected">
             {translatedSteps.map((item, index) => (
-              <div key={item.title} className="snap-step snap-step--card">
+              <div key={item.title} className={`snap-step snap-step--card ${item.colorClass}`}>
                 {index < translatedSteps.length - 1 && (
                   <div className="snap-step-connector" />
                 )}
@@ -1585,6 +1732,32 @@ export default function SnapLaunchSalesLandingPage() {
         </div>
       </section>
 
+      <section className="snap-section-alt snap-section-proof">
+        <div className="snap-container">
+          <div className="snap-proof-layout">
+            <div className="snap-section-head">
+              <p>{S.caseStudy.eyebrow}</p>
+              <h2>{S.caseStudy.title}</h2>
+              <span>{S.caseStudy.sub}</span>
+            </div>
+
+            <div className="snap-proof-box snap-proof-box--case-study">
+              <p>{S.caseStudy.scenarioTitle}</p>
+              <strong>{S.caseStudy.scenarioText}</strong>
+            </div>
+
+            <div className="snap-proof-metrics">
+              {S.caseStudy.stats.map((item) => (
+                <div key={item.label} className="snap-proof-metric">
+                  <strong>{item.value}</strong>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="pricing" className="snap-section-alt">
         <div className="snap-container">
           <div className="snap-section-head">
@@ -1711,6 +1884,9 @@ export default function SnapLaunchSalesLandingPage() {
                 <option value="apartments">{S.book.industries.apartments}</option>
                 <option value="airbnb">{S.book.industries.airbnb}</option>
                 <option value="photography">{S.book.industries.photography}</option>
+                <option value="plumbers">{S.book.industries.plumbers}</option>
+                <option value="electricians">{S.book.industries.electricians}</option>
+                <option value="painters">{S.book.industries.painters}</option>
               </select>
               <textarea
                 className="snap-textarea snap-textarea--field"
